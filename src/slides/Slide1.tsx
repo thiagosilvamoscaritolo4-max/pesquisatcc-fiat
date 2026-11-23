@@ -13,10 +13,10 @@ const LeadField: React.FC = () => {
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       const i = r * COLS + c;
-      const appear = 40 + random(`a${i}`) * 22;
+      const appear = 95 + random(`a${i}`) * 30;
       const o = interpolate(frame, [appear, appear + 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
       const isBuyer = BUYERS.has(i);
-      const lit = 78 + [...BUYERS].indexOf(i) * 5;
+      const lit = 160 + [...BUYERS].indexOf(i) * 5;
       const l = isBuyer
         ? interpolate(frame, [lit, lit + 8], [0, 1], {
             extrapolateLeft: 'clamp',
@@ -24,7 +24,7 @@ const LeadField: React.FC = () => {
             easing: Easing.out(Easing.back(3)),
           })
         : 0;
-      const dim = isBuyer ? 1 : interpolate(frame, [78, 95], [1, 0.35], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+      const dim = isBuyer ? 1 : interpolate(frame, [158, 175], [1, 0.35], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
       const ring = isBuyer ? interpolate((frame - lit) % 40, [0, 40], [0, 1], {extrapolateLeft: 'clamp'}) : 0;
       const showRing = isBuyer && frame > lit;
       dots.push(
@@ -70,7 +70,7 @@ const LeadField: React.FC = () => {
       );
     }
   }
-  const caption = interpolate(frame, [100, 112], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const caption = interpolate(frame, [180, 192], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <div style={{position: 'absolute', top: 560, left: 0, width: 920, height: 420}}>
       {dots}
@@ -106,7 +106,7 @@ export const Slide1: React.FC = () => (
       </div>
     </div>
     <Words
-      delay={40}
+      delay={86}
       text="Volume de lead não paga conta. Quem paga é o lead certo."
       style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 38, lineHeight: 1.4, color: colors.bodyLight, marginTop: 44}}
     />

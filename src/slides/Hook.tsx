@@ -27,9 +27,9 @@ const Stat: React.FC<{label: string; value: number; filled?: boolean; shake?: nu
 export const Hook: React.FC = () => {
   const frame = useCurrentFrame();
   const leads = Math.round(
-    interpolate(frame, [24, 90], [0, 127], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)}),
+    interpolate(frame, [18, 60], [0, 127], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)}),
   );
-  const shakeT = frame - 70;
+  const shakeT = frame - 52;
   const shake = shakeT > 0 && shakeT < 16 ? Math.sin(shakeT * 2.2) * 12 * (1 - shakeT / 16) : 0;
   const nuncaShake = frame > 22 && frame < 34 ? Math.sin(frame * 3) * 5 : 0;
   return (

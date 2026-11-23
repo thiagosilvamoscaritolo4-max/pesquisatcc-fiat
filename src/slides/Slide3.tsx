@@ -21,7 +21,7 @@ const Card: React.FC<{title: string; sub: string; text: string; filled?: boolean
 );
 
 const Bridge: React.FC = () => {
-  const p = useSp(60, {damping: 12, stiffness: 140});
+  const p = useSp(212, {damping: 12, stiffness: 140});
   return (
     <div
       style={{
@@ -61,19 +61,19 @@ export const Slide3: React.FC = () => (
       </div>
     </div>
     <div style={{position: 'relative', display: 'flex', gap: 24, marginTop: 52}}>
-      <Enter delay={32} from="left" distance={120} style={{flex: 1}}>
+      <Enter delay={70} from="left" distance={120} style={{flex: 1}}>
         <Card title="MQL" sub="MARKETING" text="Tem o perfil de quem compra." />
       </Enter>
-      <Enter delay={44} from="right" distance={120} style={{flex: 1}}>
+      <Enter delay={202} from="right" distance={120} style={{flex: 1}}>
         <Card title="SQL" sub="COMERCIAL" text="Conversou e tem intenção real de compra." filled />
       </Enter>
       <Bridge />
     </div>
-    <Enter delay={72} from="up" distance={60} style={{marginTop: 20}}>
+    <Enter delay={375} from="up" distance={60} style={{marginTop: 20}}>
       <div style={{background: colors.orange, borderRadius: 22, padding: '26px 30px', color: colors.dark}}>
         <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 36}}>NA PRÁTICA</div>
         <Words
-          delay={80}
+          delay={383}
           stagger={1.3}
           text="O anúncio entrega o MQL. O comercial transforma em SQL."
           style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 30, marginTop: 6}}

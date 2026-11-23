@@ -1,6 +1,6 @@
 import './fonts';
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors} from './theme';
 import {TransitionSeries, springTiming} from '@remotion/transitions';
 import {slide} from '@remotion/transitions/slide';
@@ -11,8 +11,13 @@ import {Slide3} from './slides/Slide3';
 import {Slide4} from './slides/Slide4';
 
 // Duração de cada slide em frames (30 fps). Ajustar aqui para casar com o áudio.
-export const durations = [110, 150, 165, 165, 190]; // gancho + 4 slides
-const T = 20;
+// Tempos sincronizados com a narração (public/narracao.mp3, cortando 3,3s de silêncio inicial).
+// Frame (30fps) em que começa a transição para cada slide + frame final:
+const X = [68, 284, 614, 1135];
+const END = 1668;
+const T0 = 20;
+export const durations = [X[0] + T0, ...X.slice(1).map((x, i) => x - X[i] + T0), END - X[3]]; // gancho + 4 slides
+const T = T0;
 const timing = springTiming({config: {damping: 200}, durationInFrames: T});
 
 export const totalDuration = durations.reduce((a, b) => a + b, 0) - T * (durations.length - 1);
@@ -63,6 +68,7 @@ export const Carrossel: React.FC = () => {
       ))}
     </TransitionSeries>
     {reels && <Progress />}
+    <Audio src={staticFile('narracao.mp3')} trimBefore={99} />
   </AbsoluteFill>
   );
 };

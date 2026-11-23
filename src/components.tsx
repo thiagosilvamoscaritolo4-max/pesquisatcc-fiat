@@ -156,14 +156,17 @@ export const Frame: React.FC<{
   cta: string;
   arrow?: boolean;
   showCounter?: boolean;
+  ctaPulseAt?: number;
   children: React.ReactNode;
-}> = ({index, bg, fg, muted, accent, cta, arrow = true, showCounter = true, children}) => {
+}> = ({index, bg, fg, muted, accent, cta, arrow = true, showCounter = true, ctaPulseAt, children}) => {
   const frame = useCurrentFrame();
   const reels = useIsReels();
   // Reels: respeita as áreas cobertas pela interface do Instagram
   const L = reels ? {head: 270, content: 460, foot: 390} : {head: 70, content: 168, foot: 62};
   const showCta = !reels || !arrow;
   const head = useSp(2);
+  const bump = useSp(ctaPulseAt ?? 99999, {damping: 8, stiffness: 180});
+  const ctaScale = ctaPulseAt !== undefined && frame >= ctaPulseAt ? 1 + 0.18 * Math.sin(Math.min(bump, 1) * Math.PI) + 0.04 * bump : 1;
   const foot = useSp(24);
   const arrowX = arrow ? Math.max(0, Math.sin((frame - 30) / 5)) * 10 : 0;
   // subtle drifting glow
@@ -218,7 +221,7 @@ export const Frame: React.FC<{
         }}
       >
         <div style={{color: muted}}>#LEADS</div>
-        <div style={{color: accent, display: showCta ? 'flex' : 'none', alignItems: 'center', gap: 14}}>
+        <div style={{color: accent, display: showCta ? 'flex' : 'none', alignItems: 'center', gap: 14, transform: `scale(${ctaScale})`, transformOrigin: 'right center'}}>
           {cta}
           {arrow && <span style={{transform: `translateX(${arrowX}px)`, letterSpacing: 0}}>⟶</span>}
         </div>

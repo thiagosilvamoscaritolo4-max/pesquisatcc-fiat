@@ -39,11 +39,11 @@ export const Slide2: React.FC = () => (
     </div>
     <div style={{display: 'flex', flexDirection: 'column', gap: 18, marginTop: 52}}>
       {rows.map((r, i) => (
-        <Enter key={i} delay={30 + i * 9} from="right" distance={140}>
+        <Enter key={i} delay={[97, 170, 219][i]} from="right" distance={140}>
           <Row {...r} />
         </Enter>
       ))}
-      <Enter delay={64} from="scale">
+      <Enter delay={251} from="scale">
         <Row t="TEM PRAZO" d={'Quer resolver agora, não "um dia".'} dark />
       </Enter>
     </div>
