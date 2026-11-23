@@ -1,6 +1,7 @@
 import './fonts';
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {colors} from './theme';
 import {TransitionSeries, springTiming} from '@remotion/transitions';
 import {slide} from '@remotion/transitions/slide';
 import {Slide1} from './slides/Slide1';
@@ -17,7 +18,35 @@ export const totalDuration = durations.reduce((a, b) => a + b, 0) - T * (duratio
 
 const slides = [Slide1, Slide2, Slide3, Slide4];
 
-export const Carrossel: React.FC = () => (
+// início de cada slide na linha do tempo
+const starts = durations.map((_, i) => durations.slice(0, i).reduce((a, b) => a + b, 0) - i * T);
+const darkSlide = [true, false, true, false];
+
+/** Barra de progresso em 4 segmentos (só no Reels). */
+const Progress: React.FC = () => {
+  const frame = useCurrentFrame();
+  const current = starts.filter((s) => frame >= s + T / 2).length - 1;
+  const fill = darkSlide[Math.max(0, current)] ? colors.orange : colors.dark;
+  return (
+    <div style={{position: 'absolute', top: 360, left: 80, right: 80, display: 'flex', gap: 10}}>
+      {durations.map((d, i) => {
+        const p = interpolate(frame, [starts[i], starts[i] + d - (i < 3 ? T : 0)], [0, 1], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        });
+        return (
+          <div key={i} style={{flex: 1, height: 6, borderRadius: 3, background: 'rgba(128,128,128,0.35)', overflow: 'hidden'}}>
+            <div style={{width: `${p * 100}%`, height: '100%', background: fill}} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export const Carrossel: React.FC = () => {
+  const reels = useVideoConfig().height > 1500;
+  return (
   <AbsoluteFill style={{background: '#0B0B0B'}}>
     <TransitionSeries>
       {slides.map((S, i) => (
@@ -31,5 +60,7 @@ export const Carrossel: React.FC = () => (
         </React.Fragment>
       ))}
     </TransitionSeries>
+    {reels && <Progress />}
   </AbsoluteFill>
-);
+  );
+};

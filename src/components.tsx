@@ -1,5 +1,7 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+
+export const useIsReels = () => useVideoConfig().height > 1500;
 import {colors, fonts} from './theme';
 
 type SpringCfg = {damping?: number; stiffness?: number; mass?: number};
@@ -156,6 +158,10 @@ export const Frame: React.FC<{
   children: React.ReactNode;
 }> = ({index, bg, fg, muted, accent, cta, arrow = true, children}) => {
   const frame = useCurrentFrame();
+  const reels = useIsReels();
+  // Reels: respeita as áreas cobertas pela interface do Instagram
+  const L = reels ? {head: 270, content: 460, foot: 390} : {head: 70, content: 168, foot: 62};
+  const showCta = !reels || !arrow;
   const head = useSp(2);
   const foot = useSp(24);
   const arrowX = arrow ? Math.max(0, Math.sin((frame - 30) / 5)) * 10 : 0;
@@ -173,7 +179,7 @@ export const Frame: React.FC<{
       <div
         style={{
           position: 'absolute',
-          top: 70,
+          top: L.head,
           left: 80,
           right: 80,
           display: 'flex',
@@ -191,12 +197,12 @@ export const Frame: React.FC<{
         </div>
       </div>
       {/* content */}
-      <div style={{position: 'absolute', top: 168, left: 80, right: 80}}>{children}</div>
+      <div style={{position: 'absolute', top: L.content, left: 80, right: 80}}>{children}</div>
       {/* footer */}
       <div
         style={{
           position: 'absolute',
-          bottom: 62,
+          bottom: L.foot,
           left: 80,
           right: 80,
           display: 'flex',
@@ -211,7 +217,7 @@ export const Frame: React.FC<{
         }}
       >
         <div style={{color: muted}}>#LEADS</div>
-        <div style={{color: accent, display: 'flex', alignItems: 'center', gap: 14}}>
+        <div style={{color: accent, display: showCta ? 'flex' : 'none', alignItems: 'center', gap: 14}}>
           {cta}
           {arrow && <span style={{transform: `translateX(${arrowX}px)`, letterSpacing: 0}}>⟶</span>}
         </div>
