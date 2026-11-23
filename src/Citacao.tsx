@@ -30,12 +30,7 @@ export const Citacao: React.FC<CitacaoProps> = ({text, author, size, theme, hand
         {author}
       </div>
       {handle && (
-        <div
-          style={{
-            position: 'absolute', left: 96, bottom: 84, fontFamily: fonts.display, fontWeight: 700, fontSize: 36,
-            letterSpacing: '0.08em', color: fg,
-          }}
-        >
+        <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 36, letterSpacing: '0.08em', color: fg, marginTop: 40}}>
           {handle}
         </div>
       )}
