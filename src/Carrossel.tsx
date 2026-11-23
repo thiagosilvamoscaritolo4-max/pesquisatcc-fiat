@@ -4,23 +4,24 @@ import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remoti
 import {colors} from './theme';
 import {TransitionSeries, springTiming} from '@remotion/transitions';
 import {slide} from '@remotion/transitions/slide';
+import {Hook} from './slides/Hook';
 import {Slide1} from './slides/Slide1';
 import {Slide2} from './slides/Slide2';
 import {Slide3} from './slides/Slide3';
 import {Slide4} from './slides/Slide4';
 
 // Duração de cada slide em frames (30 fps). Ajustar aqui para casar com o áudio.
-export const durations = [150, 165, 165, 190];
+export const durations = [110, 150, 165, 165, 190]; // gancho + 4 slides
 const T = 20;
 const timing = springTiming({config: {damping: 200}, durationInFrames: T});
 
 export const totalDuration = durations.reduce((a, b) => a + b, 0) - T * (durations.length - 1);
 
-const slides = [Slide1, Slide2, Slide3, Slide4];
+const slides = [Hook, Slide1, Slide2, Slide3, Slide4];
 
 // início de cada slide na linha do tempo
 const starts = durations.map((_, i) => durations.slice(0, i).reduce((a, b) => a + b, 0) - i * T);
-const darkSlide = [true, false, true, false];
+const darkSlide = [true, true, false, true, false];
 
 /** Barra de progresso em 4 segmentos (só no Reels). */
 const Progress: React.FC = () => {
@@ -29,8 +30,9 @@ const Progress: React.FC = () => {
   const fill = darkSlide[Math.max(0, current)] ? colors.orange : colors.dark;
   return (
     <div style={{position: 'absolute', top: 360, left: 80, right: 80, display: 'flex', gap: 10}}>
-      {durations.map((d, i) => {
-        const p = interpolate(frame, [starts[i], starts[i] + d - (i < 3 ? T : 0)], [0, 1], {
+      {durations.slice(1).map((d, k) => {
+        const i = k + 1; // pula o gancho
+        const p = interpolate(frame, [starts[i], starts[i] + d - (i < durations.length - 1 ? T : 0)], [0, 1], {
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });

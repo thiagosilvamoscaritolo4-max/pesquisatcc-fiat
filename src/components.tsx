@@ -155,8 +155,9 @@ export const Frame: React.FC<{
   accent: string;
   cta: string;
   arrow?: boolean;
+  showCounter?: boolean;
   children: React.ReactNode;
-}> = ({index, bg, fg, muted, accent, cta, arrow = true, children}) => {
+}> = ({index, bg, fg, muted, accent, cta, arrow = true, showCounter = true, children}) => {
   const frame = useCurrentFrame();
   const reels = useIsReels();
   // Reels: respeita as áreas cobertas pela interface do Instagram
@@ -192,7 +193,7 @@ export const Frame: React.FC<{
         <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 32, color: fg, letterSpacing: '-0.02em'}}>
           ts<sup style={{fontSize: 20, fontWeight: 700}}>↗</sup>
         </div>
-        <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 30, color: muted, letterSpacing: '0.02em'}}>
+        <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 30, color: muted, letterSpacing: '0.02em', opacity: showCounter ? 1 : 0}}>
           {String(index).padStart(2, '0')} / 04
         </div>
       </div>
