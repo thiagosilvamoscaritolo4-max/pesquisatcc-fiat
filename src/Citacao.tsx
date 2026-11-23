@@ -39,4 +39,5 @@ export const citacoes: {id: string; props: CitacaoProps}[] = [
   {id: 'Citacao1', props: {author, theme: 'orange', size: 118, text: 'Seu cliente não sumiu. Ele comprou de quem respondeu primeiro.'}},
   {id: 'Citacao2', props: {author, theme: 'orange', size: 150, text: 'Não falta lead. Falta follow-up.'}},
   {id: 'Citacao3', props: {author, theme: 'orange', size: 112, text: 'Lead esquecido no WhatsApp é dinheiro que você pagou pra jogar fora.'}},
+  {id: 'Motivacao', props: {author, theme: 'orange', size: 112, text: 'Ninguém vê os dias em que você continuou sem vontade. Mas todo mundo vai ver o resultado.'}},
 ];
