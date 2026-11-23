@@ -61,7 +61,7 @@ export const Tweet: React.FC<TweetProps> = ({name, handle, text, avatar}) => (
   </AbsoluteFill>
 );
 
-const base = {name: 'Seu Nome', handle: '@seu.usuario'};
+const base = {name: 'Thiago Silva', handle: '@workthiago', avatar: 'avatar.jpg'};
 export const tweets: {id: string; props: TweetProps}[] = [
   {id: 'Tweet1', props: {...base, text: 'Seu cliente não sumiu.\n\nEle comprou de quem respondeu primeiro.'}},
   {id: 'Tweet2', props: {...base, text: 'Não falta lead.\n\nFalta follow-up.'}},
