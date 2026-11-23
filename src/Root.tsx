@@ -3,6 +3,7 @@ import {Composition} from 'remotion';
 import {Carrossel, totalDuration} from './Carrossel';
 import {Frase, frases} from './Frase';
 import {Tweet, tweets} from './Tweet';
+import {Citacao, citacoes} from './Citacao';
 
 export const Root: React.FC = () => (
   <>
@@ -27,6 +28,9 @@ export const Root: React.FC = () => (
   ))}
   {tweets.map((t) => (
     <Composition key={t.id} id={t.id} component={Tweet} defaultProps={t.props} durationInFrames={1} fps={30} width={1080} height={1440} />
+  ))}
+  {citacoes.map((c) => (
+    <Composition key={c.id} id={c.id} component={Citacao} defaultProps={c.props} durationInFrames={1} fps={30} width={1080} height={1440} />
   ))}
   </>
 );
