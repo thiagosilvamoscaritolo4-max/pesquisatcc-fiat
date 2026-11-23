@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, random, useCurrentFrame, Easing} from 'remotion';
-import {Frame, Highlight, Label, Reveal, Words, headline} from '../components';
+import {Frame, Highlight, Label, Para, Reveal, headline} from '../components';
 import {colors, fonts} from '../theme';
 
 const COLS = 12;
@@ -21,11 +21,11 @@ const LeadField: React.FC = () => {
         ? interpolate(frame, [lit, lit + 8], [0, 1], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
-            easing: Easing.out(Easing.back(3)),
+            easing: Easing.out(Easing.back(1.6)),
           })
         : 0;
       const dim = isBuyer ? 1 : interpolate(frame, [158, 175], [1, 0.35], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-      const ring = isBuyer ? interpolate((frame - lit) % 40, [0, 40], [0, 1], {extrapolateLeft: 'clamp'}) : 0;
+      const ring = isBuyer ? interpolate(frame - lit, [0, 24], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
       const showRing = isBuyer && frame > lit;
       dots.push(
         <div
@@ -105,9 +105,10 @@ export const Slide1: React.FC = () => (
         </Highlight>
       </div>
     </div>
-    <Words
+    <Para
       delay={86}
-      text="Volume de lead não paga conta. Quem paga é o lead certo."
+      mark={colors.orange}
+      parts={[{t: 'Volume de lead', at: 118, kind: 'strike'}, 'não paga conta. Quem paga é o', {t: 'lead certo.', at: 192}]}
       style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 38, lineHeight: 1.4, color: colors.bodyLight, marginTop: 44}}
     />
     <LeadField />

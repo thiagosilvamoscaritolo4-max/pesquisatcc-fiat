@@ -12,23 +12,29 @@ export const useSp = (delay: number, config: SpringCfg = {}) => {
   return spring({frame: frame - delay, fps, config: {damping: 200, ...config}});
 };
 
-/** Text line that rises from behind a mask. */
+export const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
+
+/** 0→1 com easing editorial (rápido no início, assenta suave). */
+export const useEase = (delay: number, dur = 16) => {
+  const frame = useCurrentFrame();
+  return interpolate(frame, [delay, delay + dur], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EXPO});
+};
+
+/** Linha de título que sobe por trás de uma máscara. */
 export const Reveal: React.FC<{delay: number; children: React.ReactNode; style?: React.CSSProperties}> = ({
   delay,
   children,
   style,
 }) => {
-  const p = useSp(delay, {damping: 15, stiffness: 110, mass: 0.9});
+  const p = useEase(delay, 18);
   return (
-    <div style={{overflow: 'hidden', whiteSpace: 'nowrap', paddingTop: 6, paddingBottom: 6, marginTop: -6, marginBottom: -6, ...style}}>
-      <div style={{transform: `translateY(${(1 - p) * 115}%) skewY(${(1 - p) * 7}deg)`, transformOrigin: 'left bottom'}}>
-        {children}
-      </div>
+    <div style={{overflow: 'hidden', whiteSpace: 'nowrap', paddingTop: 6, paddingBottom: 14, marginTop: -6, marginBottom: -14, ...style}}>
+      <div style={{transform: `translateY(${(1 - p) * 105}%)`}}>{children}</div>
     </div>
   );
 };
 
-/** Box that wipes in from the left, then text rises inside it. */
+/** Caixa que varre da esquerda; depois o texto sobe dentro dela. */
 export const Highlight: React.FC<{
   delay: number;
   bg: string;
@@ -36,8 +42,8 @@ export const Highlight: React.FC<{
   children: React.ReactNode;
   padX?: number;
 }> = ({delay, bg, color, children, padX = 12}) => {
-  const box = useSp(delay, {damping: 22, stiffness: 160});
-  const txt = useSp(delay + 6, {damping: 14, stiffness: 120});
+  const box = useEase(delay, 14);
+  const txt = useEase(delay + 5, 16);
   return (
     <div style={{position: 'relative', display: 'inline-block', padding: `10px ${padX}px 0`}}>
       <div
@@ -51,13 +57,44 @@ export const Highlight: React.FC<{
         }}
       />
       <div style={{position: 'relative', overflow: 'hidden', color}}>
-        <div style={{transform: `translateY(${(1 - txt) * 115}%)`}}>{children}</div>
+        <div style={{transform: `translateY(${(1 - txt) * 105}%)`}}>{children}</div>
       </div>
     </div>
   );
 };
 
-/** Letter-spaced eyebrow label, letters typed in. */
+/** Rastro na palavra-chave: traço que corre por baixo (ou risca) no momento em que é falada. */
+export const Mark: React.FC<{
+  at: number;
+  color: string;
+  kind?: 'under' | 'strike';
+  thickness?: number;
+  children: React.ReactNode;
+}> = ({at, color, kind = 'under', thickness, children}) => {
+  const p = useEase(at, 12);
+  const strike = kind === 'strike';
+  const h = thickness ?? (strike ? 5 : 7);
+  return (
+    <span style={{position: 'relative', display: 'inline-block', opacity: strike ? 1 - 0.45 * p : 1}}>
+      {children}
+      <span
+        style={{
+          position: 'absolute',
+          left: -3,
+          right: -3,
+          height: h,
+          bottom: strike ? '42%' : -h * 0.6,
+          background: color,
+          borderRadius: 1,
+          transform: `scaleX(${p})`,
+          transformOrigin: 'left center',
+        }}
+      />
+    </span>
+  );
+};
+
+/** Rótulo espaçado, letras entrando em sequência. */
 export const Label: React.FC<{text: string; delay: number; color: string; size?: number}> = ({
   text,
   delay,
@@ -78,15 +115,10 @@ export const Label: React.FC<{text: string; delay: number; color: string; size?:
       }}
     >
       {text.split('').map((ch, i) => {
-        const t = frame - delay - i * 1.2;
-        const o = interpolate(t, [0, 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-        const y = interpolate(t, [0, 8], [14, 0], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-          easing: Easing.out(Easing.cubic),
-        });
+        const t = frame - delay - i * 1;
+        const o = t >= 0 ? 1 : 0;
         return (
-          <span key={i} style={{opacity: o, transform: `translateY(${y}px)`, display: 'inline-block'}}>
+          <span key={i} style={{opacity: o, display: 'inline-block'}}>
             {ch}
           </span>
         );
@@ -95,32 +127,46 @@ export const Label: React.FC<{text: string; delay: number; color: string; size?:
   );
 };
 
-/** Body copy, word by word with blur. */
-export const Words: React.FC<{text: string; delay: number; style?: React.CSSProperties; stagger?: number}> = ({
-  text,
-  delay,
-  style,
-  stagger = 1.6,
-}) => {
+export type Part = string | {t: string; at: number; kind?: 'under' | 'strike'};
+
+/** Texto corrido: cada palavra sobe por trás de máscara; trechos marcados ganham rastro. */
+export const Para: React.FC<{
+  parts: Part[];
+  delay: number;
+  mark: string;
+  style?: React.CSSProperties;
+  stagger?: number;
+}> = ({parts, delay, mark, style, stagger = 1}) => {
   const frame = useCurrentFrame();
+  const units: {node: React.ReactNode; key: string}[] = [];
+  parts.forEach((part, pi) => {
+    if (typeof part === 'string') {
+      part.split(' ').filter(Boolean).forEach((w, wi) => units.push({node: w, key: `${pi}-${wi}`}));
+    } else {
+      units.push({
+        node: (
+          <Mark at={part.at} color={mark} kind={part.kind}>
+            {part.t}
+          </Mark>
+        ),
+        key: `${pi}-m`,
+      });
+    }
+  });
   return (
     <div style={style}>
-      {text.split(' ').map((w, i) => {
-        const t = frame - delay - i * stagger;
-        const o = interpolate(t, [0, 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-        const y = interpolate(t, [0, 10], [18, 0], {
+      {units.map((u, i) => {
+        const p = interpolate(frame - delay - i * stagger, [0, 14], [0, 1], {
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
-          easing: Easing.out(Easing.cubic),
+          easing: EXPO,
         });
-        const b = interpolate(t, [0, 8], [8, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
         return (
-          <span
-            key={i}
-            style={{display: 'inline-block', opacity: o, transform: `translateY(${y}px)`, filter: `blur(${b}px)`}}
-          >
-            {w}
-            {' '}
+          <span key={u.key} style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top', paddingBottom: 8, marginBottom: -8}}>
+            <span style={{display: 'inline-block', transform: `translateY(${(1 - p) * 105}%)`}}>
+              {u.node}
+              {'\u00A0'}
+            </span>
           </span>
         );
       })}
@@ -128,7 +174,7 @@ export const Words: React.FC<{text: string; delay: number; style?: React.CSSProp
   );
 };
 
-/** Element that slides + fades in. */
+/** Elemento que entra deslizando. */
 export const Enter: React.FC<{
   delay: number;
   from?: 'up' | 'left' | 'right' | 'scale';
@@ -136,14 +182,29 @@ export const Enter: React.FC<{
   children: React.ReactNode;
   style?: React.CSSProperties;
 }> = ({delay, from = 'up', distance = 80, children, style}) => {
-  const p = useSp(delay, {damping: 17, stiffness: 120});
-  const o = interpolate(p, [0, 0.4], [0, 1], {extrapolateRight: 'clamp'});
+  const p = useEase(delay, 18);
+  const o = interpolate(p, [0, 0.25], [0, 1], {extrapolateRight: 'clamp'});
   let transform = '';
   if (from === 'up') transform = `translateY(${(1 - p) * distance}px)`;
   if (from === 'left') transform = `translateX(${-(1 - p) * distance}px)`;
   if (from === 'right') transform = `translateX(${(1 - p) * distance}px)`;
-  if (from === 'scale') transform = `scale(${0.6 + 0.4 * p})`;
+  if (from === 'scale') transform = `scale(${0.92 + 0.08 * p})`;
   return <div style={{opacity: o, transform, ...style}}>{children}</div>;
+};
+
+/** Grão de filme sutil (tira o aspecto "digital limpo demais"). */
+export const Grain: React.FC<{opacity?: number}> = ({opacity = 0.07}) => {
+  const frame = useCurrentFrame();
+  const seed = Math.floor(frame / 2) % 50;
+  return (
+    <svg style={{position: 'absolute', inset: 0, width: '100%', height: '100%', opacity, mixBlendMode: 'overlay', pointerEvents: 'none'}}>
+      <filter id={`g${seed}`}>
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed={seed} stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <rect width="100%" height="100%" filter={`url(#g${seed})`} />
+    </svg>
+  );
 };
 
 /** Slide chrome: logo, counter, hashtag and CTA. */
@@ -164,21 +225,13 @@ export const Frame: React.FC<{
   // Reels: respeita as áreas cobertas pela interface do Instagram
   const L = reels ? {head: 270, content: 460, foot: 390} : {head: 70, content: 168, foot: 62};
   const showCta = !reels || !arrow;
-  const head = useSp(2);
+  const head = useEase(0, 14);
   const bump = useSp(ctaPulseAt ?? 99999, {damping: 8, stiffness: 180});
   const ctaScale = ctaPulseAt !== undefined && frame >= ctaPulseAt ? 1 + 0.18 * Math.sin(Math.min(bump, 1) * Math.PI) + 0.04 * bump : 1;
-  const foot = useSp(24);
+  const foot = useEase(10, 14);
   const arrowX = arrow ? Math.max(0, Math.sin((frame - 30) / 5)) * 10 : 0;
-  // subtle drifting glow
-  const gx = 50 + Math.sin(frame / 60) * 20;
-  const gy = 40 + Math.cos(frame / 75) * 15;
-  const glow =
-    bg === colors.dark
-      ? `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,106,19,0.10), rgba(0,0,0,0) 55%)`
-      : `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,160,80,0.35), rgba(0,0,0,0) 60%)`;
   return (
     <div style={{position: 'absolute', inset: 0, background: bg, overflow: 'hidden'}}>
-      <div style={{position: 'absolute', inset: 0, background: glow}} />
       {/* header */}
       <div
         style={{
@@ -226,6 +279,7 @@ export const Frame: React.FC<{
           {arrow && <span style={{transform: `translateX(${arrowX}px)`, letterSpacing: 0}}>⟶</span>}
         </div>
       </div>
+      <Grain opacity={bg === colors.dark ? 0.1 : 0.14} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {Enter, Frame, Highlight, Label, Reveal, Words, headline} from '../components';
+import {Enter, Frame, Highlight, Label, Para, Reveal, headline} from '../components';
 import {colors, fonts} from '../theme';
 
 const QD = [98, 136, 206];
@@ -49,10 +49,10 @@ export const Slide4: React.FC = () => {
               </div>
               <div>
                 <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 44}}>{x.t}</div>
-                <Words
+                <Para
                   delay={QD[i] + 8}
-                  stagger={1}
-                  text={x.q}
+                  mark={colors.dark}
+                  parts={[x.q]}
                   style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 29, marginTop: 2}}
                 />
               </div>
@@ -62,10 +62,10 @@ export const Slide4: React.FC = () => {
         <Enter delay={281} from="scale">
           <div style={{background: colors.dark, borderRadius: 20, padding: '26px 30px', color: colors.orange}}>
             <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 36}}>COMO LER</div>
-            <Words
+            <Para
               delay={289}
-              stagger={1.2}
-              text="Resposta vaga indica curioso. Resposta com contexto e prazo indica comprador."
+              mark={colors.orange}
+              parts={['Resposta', {t: 'vaga', at: 300, kind: 'strike'}, 'indica curioso. Resposta com', {t: 'contexto e prazo', at: 385}, 'indica comprador.']}
               style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 31, lineHeight: 1.35, marginTop: 6}}
             />
           </div>

@@ -1,8 +1,8 @@
 import React from 'react';
-import {Enter, Frame, Highlight, Label, Reveal, Words, headline, useSp} from '../components';
+import {Enter, Frame, Highlight, Label, Para, Part, Reveal, headline, useEase} from '../components';
 import {colors, fonts} from '../theme';
 
-const Card: React.FC<{title: string; sub: string; text: string; filled?: boolean}> = ({title, sub, text, filled}) => (
+const Card: React.FC<{title: string; sub: string; text: Part[]; delay: number; filled?: boolean}> = ({title, sub, text, delay, filled}) => (
   <div
     style={{
       height: 300,
@@ -16,12 +16,12 @@ const Card: React.FC<{title: string; sub: string; text: string; filled?: boolean
   >
     <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 84, lineHeight: 0.9}}>{title}</div>
     <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 36, marginTop: 18}}>{sub}</div>
-    <div style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 29, lineHeight: 1.4, marginTop: 12}}>{text}</div>
+    <Para delay={delay + 8} parts={text} mark={filled ? colors.dark : colors.orange} style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 29, lineHeight: 1.4, marginTop: 12}} />
   </div>
 );
 
 const Bridge: React.FC = () => {
-  const p = useSp(212, {damping: 12, stiffness: 140});
+  const p = useEase(214, 14);
   return (
     <div
       style={{
@@ -40,8 +40,8 @@ const Bridge: React.FC = () => {
         justifyContent: 'center',
         fontSize: 34,
         fontWeight: 900,
-        transform: `scale(${p}) rotate(${(1 - p) * -180}deg)`,
-        boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+        transform: `scale(${p})`,
+        
       }}
     >
       →
@@ -62,20 +62,20 @@ export const Slide3: React.FC = () => (
     </div>
     <div style={{position: 'relative', display: 'flex', gap: 24, marginTop: 52}}>
       <Enter delay={70} from="left" distance={120} style={{flex: 1}}>
-        <Card title="MQL" sub="MARKETING" text="Tem o perfil de quem compra." />
+        <Card title="MQL" sub="MARKETING" delay={70} text={['Tem o', {t: 'perfil', at: 150}, 'de quem compra.']} />
       </Enter>
       <Enter delay={202} from="right" distance={120} style={{flex: 1}}>
-        <Card title="SQL" sub="COMERCIAL" text="Conversou e tem intenção real de compra." filled />
+        <Card title="SQL" sub="COMERCIAL" delay={202} text={['Conversou e tem', {t: 'intenção real', at: 300}, 'de compra.']} filled />
       </Enter>
       <Bridge />
     </div>
     <Enter delay={375} from="up" distance={60} style={{marginTop: 20}}>
       <div style={{background: colors.orange, borderRadius: 22, padding: '26px 30px', color: colors.dark}}>
         <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 36}}>NA PRÁTICA</div>
-        <Words
+        <Para
           delay={383}
-          stagger={1.3}
-          text="O anúncio entrega o MQL. O comercial transforma em SQL."
+          mark={colors.dark}
+          parts={['O anúncio entrega o', {t: 'MQL.', at: 425}, 'O comercial transforma em', {t: 'SQL.', at: 500}]}
           style={{fontFamily: fonts.body, fontWeight: 600, fontSize: 30, marginTop: 6}}
         />
       </div>

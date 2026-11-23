@@ -1,14 +1,15 @@
 import React from 'react';
-import {Enter, Frame, Highlight, Label, Reveal, headline} from '../components';
+import {Enter, Frame, Highlight, Label, Para, Part, Reveal, headline} from '../components';
 import {colors, fonts} from '../theme';
 
-const rows = [
-  {t: 'PERGUNTA DO PRODUTO', d: 'Quer entender como funciona, não só o preço.'},
-  {t: 'TEM O PROBLEMA', d: 'O que você vende resolve algo que ele vive hoje.'},
-  {t: 'TEM ORÇAMENTO', d: 'Consegue pagar o que você cobra.'},
+const RD = [97, 170, 219];
+const rows: {t: string; d: Part[]}[] = [
+  {t: 'PERGUNTA DO PRODUTO', d: ['Quer entender', {t: 'como funciona,', at: RD[0] + 26}, 'não só o preço.']},
+  {t: 'TEM O PROBLEMA', d: ['O que você vende resolve algo que ele', {t: 'vive hoje.', at: RD[1] + 22}]},
+  {t: 'TEM ORÇAMENTO', d: ['Consegue', {t: 'pagar', at: RD[2] + 18}, 'o que você cobra.']},
 ];
 
-const Row: React.FC<{t: string; d: string; dark?: boolean}> = ({t, d, dark}) => (
+const Row: React.FC<{t: string; d: Part[]; delay: number; dark?: boolean}> = ({t, d, delay, dark}) => (
   <div
     style={{
       display: 'flex',
@@ -22,7 +23,7 @@ const Row: React.FC<{t: string; d: string; dark?: boolean}> = ({t, d, dark}) => 
     }}
   >
     <div style={{width: 284, fontFamily: fonts.display, fontWeight: 900, fontSize: 44, lineHeight: 1.05}}>{t}</div>
-    <div style={{flex: 1, fontFamily: fonts.body, fontWeight: 600, fontSize: 29, lineHeight: 1.4}}>{d}</div>
+    <Para delay={delay + 4} parts={d} mark={dark ? colors.orange : colors.dark} style={{flex: 1, fontFamily: fonts.body, fontWeight: 600, fontSize: 29, lineHeight: 1.4}} />
   </div>
 );
 
@@ -39,12 +40,12 @@ export const Slide2: React.FC = () => (
     </div>
     <div style={{display: 'flex', flexDirection: 'column', gap: 18, marginTop: 52}}>
       {rows.map((r, i) => (
-        <Enter key={i} delay={[97, 170, 219][i]} from="right" distance={140}>
-          <Row {...r} />
+        <Enter key={i} delay={RD[i]} from="right" distance={120}>
+          <Row {...r} delay={RD[i]} />
         </Enter>
       ))}
       <Enter delay={251} from="scale">
-        <Row t="TEM PRAZO" d={'Quer resolver agora, não "um dia".'} dark />
+        <Row t="TEM PRAZO" d={['Quer resolver', {t: 'agora,', at: 272}, 'não "um dia".']} delay={251} dark />
       </Enter>
     </div>
   </Frame>

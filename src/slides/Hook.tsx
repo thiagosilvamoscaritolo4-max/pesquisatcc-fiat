@@ -1,6 +1,6 @@
 import React from 'react';
 import {Easing, interpolate, useCurrentFrame} from 'remotion';
-import {Enter, Frame, Highlight, Reveal, headline} from '../components';
+import {Enter, Frame, Highlight, Mark, Reveal, headline} from '../components';
 import {colors, fonts} from '../theme';
 
 const Stat: React.FC<{label: string; value: number; filled?: boolean; shake?: number}> = ({label, value, filled, shake = 0}) => (
@@ -31,11 +31,11 @@ export const Hook: React.FC = () => {
   );
   const shakeT = frame - 52;
   const shake = shakeT > 0 && shakeT < 16 ? Math.sin(shakeT * 2.2) * 12 * (1 - shakeT / 16) : 0;
-  const nuncaShake = frame > 22 && frame < 34 ? Math.sin(frame * 3) * 5 : 0;
+  const nuncaShake = 0;
   return (
     <Frame index={0} showCounter={false} bg={colors.dark} fg={colors.light} muted={colors.grey} accent={colors.orange} cta="ARRASTA">
       <div style={{...headline, color: colors.light}}>
-        <Reveal delay={0}>VOCÊ TÁ PAGANDO</Reveal>
+        <Reveal delay={0}>VOCÊ TÁ <Mark at={12} color={colors.orange} thickness={10}>PAGANDO</Mark></Reveal>
         <Reveal delay={4}>POR LEAD QUE</Reveal>
         <div style={{marginTop: 8, transform: `translateX(${nuncaShake}px)`}}>
           <Highlight delay={10} bg={colors.orange} color={colors.dark}>

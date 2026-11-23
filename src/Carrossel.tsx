@@ -2,8 +2,9 @@ import './fonts';
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors} from './theme';
-import {TransitionSeries, springTiming} from '@remotion/transitions';
-import {slide} from '@remotion/transitions/slide';
+import {TransitionSeries, linearTiming} from '@remotion/transitions';
+import {Easing} from 'remotion';
+import {wipe} from './wipe';
 import {Hook} from './slides/Hook';
 import {Slide1} from './slides/Slide1';
 import {Slide2} from './slides/Slide2';
@@ -15,10 +16,11 @@ import {Slide4} from './slides/Slide4';
 // Frame (30fps) em que começa a transição para cada slide + frame final:
 const X = [68, 284, 614, 1135];
 const END = 1668;
-const T0 = 20;
+const T0 = 18;
 export const durations = [X[0] + T0, ...X.slice(1).map((x, i) => x - X[i] + T0), END - X[3]]; // gancho + 4 slides
 const T = T0;
-const timing = springTiming({config: {damping: 200}, durationInFrames: T});
+const timing = linearTiming({durationInFrames: T, easing: Easing.bezier(0.7, 0, 0.2, 1)});
+const edges = [colors.orange, colors.light, colors.light, colors.light];
 
 export const totalDuration = durations.reduce((a, b) => a + b, 0) - T * (durations.length - 1);
 
@@ -62,7 +64,7 @@ export const Carrossel: React.FC = () => {
             <S />
           </TransitionSeries.Sequence>
           {i < slides.length - 1 && (
-            <TransitionSeries.Transition presentation={slide({direction: 'from-right'})} timing={timing} />
+            <TransitionSeries.Transition presentation={wipe({edge: edges[i]})} timing={timing} />
           )}
         </React.Fragment>
       ))}
