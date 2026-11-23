@@ -5,10 +5,10 @@ import {AbsoluteFill} from 'remotion';
 import {Grain} from './components';
 import {colors, fonts} from './theme';
 
-export type CitacaoProps = {text: string; author: string; size: number; theme: 'orange' | 'dark'};
+export type CitacaoProps = {text: string; author: string; size: number; theme: 'orange' | 'dark'; handle?: string};
 
 /** Frase de impacto minimalista: fundo chapado, frase grande, assinatura. */
-export const Citacao: React.FC<CitacaoProps> = ({text, author, size, theme}) => {
+export const Citacao: React.FC<CitacaoProps> = ({text, author, size, theme, handle}) => {
   const orange = theme === 'orange';
   const fg = orange ? colors.dark : colors.light;
   return (
@@ -29,6 +29,16 @@ export const Citacao: React.FC<CitacaoProps> = ({text, author, size, theme}) => 
       >
         {author}
       </div>
+      {handle && (
+        <div
+          style={{
+            position: 'absolute', left: 96, bottom: 84, fontFamily: fonts.display, fontWeight: 700, fontSize: 36,
+            letterSpacing: '0.08em', color: fg,
+          }}
+        >
+          {handle}
+        </div>
+      )}
       <Grain opacity={orange ? 0.12 : 0.08} />
     </AbsoluteFill>
   );
@@ -40,5 +50,5 @@ export const citacoes: {id: string; props: CitacaoProps}[] = [
   {id: 'Citacao2', props: {author, theme: 'orange', size: 150, text: 'Não falta lead. Falta follow-up.'}},
   {id: 'Citacao3', props: {author, theme: 'orange', size: 112, text: 'Lead esquecido no WhatsApp é dinheiro que você pagou pra jogar fora.'}},
   {id: 'Motivacao', props: {author, theme: 'orange', size: 112, text: 'Ninguém vê os dias em que você continuou sem vontade. Mas todo mundo vai ver o resultado.'}},
-  {id: 'Biblia', props: {author: 'Gálatas 6:9', theme: 'orange', size: 106, text: 'E não nos cansemos de fazer o bem, pois no tempo próprio colheremos, se não\u00A0desanimarmos.'}},
+  {id: 'Biblia', props: {handle: '@workthiago', author: 'Gálatas 6:9', theme: 'orange', size: 106, text: 'E não nos cansemos de fazer o bem, pois no tempo próprio colheremos, se não\u00A0desanimarmos.'}},
 ];
