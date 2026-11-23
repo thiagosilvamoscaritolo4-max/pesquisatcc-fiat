@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import {Carrossel, totalDuration} from './Carrossel';
 import {Frase, frases} from './Frase';
+import {Tweet, tweets} from './Tweet';
 
 export const Root: React.FC = () => (
   <>
@@ -23,6 +24,9 @@ export const Root: React.FC = () => (
   />
   {frases.map((f) => (
     <Composition key={f.id} id={f.id} component={Frase} defaultProps={f.props} durationInFrames={120} fps={30} width={1080} height={1350} />
+  ))}
+  {tweets.map((t) => (
+    <Composition key={t.id} id={t.id} component={Tweet} defaultProps={t.props} durationInFrames={1} fps={30} width={1080} height={1440} />
   ))}
   </>
 );
