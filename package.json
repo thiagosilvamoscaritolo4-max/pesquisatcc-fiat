@@ -1,0 +1,33 @@
+{
+  "name": "pesquisatcc-fiat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiagosilvamoscaritolo4-max/pesquisatcc-fiat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thiagosilvamoscaritolo4-max/pesquisatcc-fiat/issues"
+  },
+  "homepage": "https://github.com/thiagosilvamoscaritolo4-max/pesquisatcc-fiat#readme",
+  "dependencies": {
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@remotion/cli": "^4.0.546",
+    "@remotion/transitions": "^4.0.546",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.546"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "typescript": "^7.0.2"
+  }
+}
