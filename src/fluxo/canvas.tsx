@@ -51,7 +51,7 @@ export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as co
 export const NW = 170; // tamanho do bloco (mundo)
 
 /* ---------------- câmera ---------------- */
-type Key = [number, number, number, number]; // frame, x, y, zoom
+export type Key = [number, number, number, number]; // frame, x, y, zoom
 export const KEYS: Key[] = [
   [0, 0, 0, 1.75], [59, 0, 0, 1.92],
   [60, 990, 150, 0.44], [150, 990, 150, 0.47], // corte: mostra tudo
@@ -64,7 +64,8 @@ export const KEYS: Key[] = [
   [1125, 990, 600, 1.05], [1260, 990, 600, 1.12], // nota final
 ];
 const ease = Easing.inOut(Easing.cubic);
-export const camAt = (f: number) => {
+export const camAt = (f: number) => camAtKeys(KEYS, f);
+export const camAtKeys = (KEYS: Key[], f: number) => {
   if (f <= KEYS[0][0]) return {x: KEYS[0][1], y: KEYS[0][2], z: KEYS[0][3]};
   for (let i = 0; i < KEYS.length - 1; i++) {
     const a = KEYS[i];
@@ -81,7 +82,7 @@ export const camAt = (f: number) => {
   const l = KEYS[KEYS.length - 1];
   return {x: l[1], y: l[2], z: l[3]};
 };
-export type Cam = ReturnType<typeof camAt>;
+export type Cam = ReturnType<typeof camAtKeys>;
 
 export const Grid: React.FC<{cam: Cam}> = ({cam}) => {
   const s = 44 * cam.z;
@@ -105,7 +106,7 @@ export const World: React.FC<{cam: Cam; children: React.ReactNode}> = ({cam, chi
 );
 
 /* ---------------- ícones ---------------- */
-type IconName = 'bolt' | 'edit' | 'split' | 'comment' | 'chat' | 'clock' | 'repeat' | 'flow' | 'check';
+export type IconName = 'bolt' | 'edit' | 'split' | 'comment' | 'chat' | 'clock' | 'repeat' | 'flow' | 'check';
 const PATHS: Record<IconName, string[]> = {
   bolt: ['M13 2L4 14h7l-1 8 9-12h-7z'],
   edit: ['M4 20h4L19 9l-4-4L4 16z', 'M14 6l4 4'],
@@ -152,8 +153,8 @@ export const EDGES: EdgeDef[] = [
 const byId = (id: string) => NODES.find((n) => n.id === id)!;
 const PORT = 38;
 
-type Pt = {x: number; y: number};
-const bez = (p0: Pt, c1: Pt, c2: Pt, p1: Pt, t: number): Pt => {
+export type Pt = {x: number; y: number};
+export const bez = (p0: Pt, c1: Pt, c2: Pt, p1: Pt, t: number): Pt => {
   const u = 1 - t;
   return {
     x: u * u * u * p0.x + 3 * u * u * t * c1.x + 3 * u * t * t * c2.x + t * t * t * p1.x,

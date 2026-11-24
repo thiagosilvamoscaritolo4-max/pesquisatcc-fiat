@@ -33,13 +33,13 @@ export const Modal: React.FC<{open: number; close: number; z: number; bg: string
   );
 };
 
-const fade = (lf: number, a: number, d = 10) => interpolate(lf, [a, a + d], [0, 1], {...clamp, easing: EXPO});
+export const fade = (lf: number, a: number, d = 10) => interpolate(lf, [a, a + d], [0, 1], {...clamp, easing: EXPO});
 
 /* ======================= ClickUp ======================= */
-const CU = {bg: '#17181B', panel: '#202126', line: '#2D2E34', text: '#ECECEC', grey: '#8B8D96', pill: '#3A3B42'};
-const LABEL: React.CSSProperties = {fontFamily: INTER, fontWeight: 600, fontSize: 22, letterSpacing: '0.1em', color: CU.grey};
+export const CU = {bg: '#17181B', panel: '#202126', line: '#2D2E34', text: '#ECECEC', grey: '#8B8D96', pill: '#3A3B42'};
+export const LABEL: React.CSSProperties = {fontFamily: INTER, fontWeight: 600, fontSize: 22, letterSpacing: '0.1em', color: CU.grey};
 
-const CUHeader: React.FC<{sending: boolean}> = ({sending}) => (
+export const CUHeader: React.FC<{sending: boolean}> = ({sending}) => (
   <>
     <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 72, borderBottom: `2px solid ${CU.line}`, display: 'flex', alignItems: 'center', padding: '0 32px', justifyContent: 'space-between'}}>
       <div style={{display: 'flex', alignItems: 'center', gap: 14, fontFamily: INTER, fontSize: 24}}>
@@ -56,11 +56,11 @@ const CUHeader: React.FC<{sending: boolean}> = ({sending}) => (
   </>
 );
 
-const Avatar: React.FC<{s?: number}> = ({s = 40}) => (
-  <span style={{width: s, height: s, borderRadius: s / 2, background: K.orange, color: K.onAccent, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: s * 0.5}}>A</span>
+export const Avatar: React.FC<{s?: number; l?: string}> = ({s = 40, l = 'A'}) => (
+  <span style={{width: s, height: s, borderRadius: s / 2, background: K.orange, color: K.onAccent, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: s * 0.5}}>{l}</span>
 );
 
-const Cursor: React.FC<{x: number; y: number; press: number}> = ({x, y, press}) => (
+export const Cursor: React.FC<{x: number; y: number; press: number}> = ({x, y, press}) => (
   <svg width={46} height={62} viewBox="0 0 30 42" style={{position: 'absolute', left: x, top: y, transform: `scale(${1 - 0.15 * press})`, transformOrigin: '0 0', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'}}>
     <path d="M1 1 L1 34 L9.5 26.5 L15.5 40 L21.5 37.5 L15.5 24.5 L27 24.5 Z" fill="#FFFFFF" stroke="#0B0B0B" strokeWidth={2} strokeLinejoin="round" />
   </svg>
@@ -199,9 +199,9 @@ export const ClickUpComment: React.FC<{lf: number}> = ({lf}) => {
 };
 
 /* ======================= WhatsApp ======================= */
-const WA = {header: '#1F2C34', bg: '#0B141A', out: '#005C4B', in: '#202C33', text: '#E9EDEF', sub: '#8696A0', blue: '#53BDEB', date: '#182229', green: '#00A884', input: '#2A3942'};
+export const WA = {header: '#1F2C34', bg: '#0B141A', out: '#005C4B', in: '#202C33', text: '#E9EDEF', sub: '#8696A0', blue: '#53BDEB', date: '#182229', green: '#00A884', input: '#2A3942'};
 
-const Ticks: React.FC<{blue: boolean}> = ({blue}) => (
+export const Ticks: React.FC<{blue: boolean}> = ({blue}) => (
   <svg width={26} height={16} viewBox="0 0 18 11" style={{marginLeft: 6}}>
     <path d="M1 6l3 3 6-7M7 8l1 1 6-7" stroke={blue ? WA.blue : WA.sub} strokeWidth={1.6} fill="none" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
@@ -223,7 +223,7 @@ const Pop: React.FC<{lf: number; at: number; out?: boolean; children: React.Reac
   );
 };
 
-const Meta: React.FC<{t: string; ticks?: boolean; blue?: boolean}> = ({t, ticks, blue = false}) => (
+export const Meta: React.FC<{t: string; ticks?: boolean; blue?: boolean}> = ({t, ticks, blue = false}) => (
   <div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', fontFamily: INTER, fontSize: 20, color: WA.sub, marginTop: 4}}>
     {t}
     {ticks && <Ticks blue={blue} />}
