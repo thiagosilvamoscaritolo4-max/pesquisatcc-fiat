@@ -4,6 +4,7 @@ import {Carrossel, totalDuration} from './Carrossel';
 import {Frase, frases} from './Frase';
 import {Tweet, tweets} from './Tweet';
 import {Citacao, citacoes} from './Citacao';
+import {Boleto, boletoDuration} from './boleto/Boleto';
 
 export const Root: React.FC = () => (
   <>
@@ -32,5 +33,6 @@ export const Root: React.FC = () => (
   {citacoes.map((c) => (
     <Composition key={c.id} id={c.id} component={Citacao} defaultProps={c.props} durationInFrames={1} fps={30} width={1080} height={1440} />
   ))}
+  <Composition id="Boleto" component={Boleto} durationInFrames={boletoDuration} fps={30} width={1080} height={1350} />
   </>
 );
