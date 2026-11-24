@@ -72,7 +72,7 @@ export const FieldsV3: React.FC<{lf: number}> = ({lf}) => {
 };
 
 /* ---------- comentário de erro + correção ---------- */
-const GROUP_ID = '120363041872@g.us';
+const GROUP_ID = 'API WhatsApp';
 export const ErrorV3: React.FC<{lf: number}> = ({lf}) => {
   const card = fade(lf, 14, 14);
   const n = Math.floor(interpolate(lf, [98, 98 + GROUP_ID.length * 1.6], [0, GROUP_ID.length], clamp));
@@ -99,12 +99,12 @@ export const ErrorV3: React.FC<{lf: number}> = ({lf}) => {
           <b>Motivo:</b> o campo Grupo WhatsApp está vazio.
         </div>
         <div style={{fontFamily: INTER, fontWeight: 500, fontSize: 27, lineHeight: 1.45, color: CU.text, marginTop: 8, opacity: fade(lf, 40)}}>
-          <b>Como resolver:</b> preencha o ID do grupo do cliente e clique em Enviar boleto de novo.
+          <b>Como resolver:</b> preencha a API WhatsApp do grupo do cliente e clique em Enviar boleto de novo.
         </div>
       </div>
       {/* correção */}
       <div style={{position: 'absolute', left: 44, top: 690, fontFamily: INTER, fontWeight: 500, fontSize: 27, color: CU.grey, opacity: fade(lf, 60)}}>Grupo WhatsApp</div>
-      <div style={{position: 'absolute', left: 380, top: 676, width: 536, height: 70, boxSizing: 'border-box', borderRadius: 12, border: `2px solid ${focused ? K.orange : CU.line}`, background: CU.panel, display: 'flex', alignItems: 'center', padding: '0 20px', fontFamily: 'monospace', fontSize: 28, color: CU.text, opacity: fade(lf, 60)}}>
+      <div style={{position: 'absolute', left: 380, top: 676, width: 536, height: 70, boxSizing: 'border-box', borderRadius: 12, border: `2px solid ${focused ? K.orange : CU.line}`, background: CU.panel, display: 'flex', alignItems: 'center', padding: '0 20px', fontFamily: INTER, fontWeight: 600, fontSize: 29, color: CU.text, opacity: fade(lf, 60)}}>
         {n > 0 ? GROUP_ID.slice(0, n) : <span style={{fontFamily: INTER, fontStyle: 'italic', color: '#5A5C64'}}>vazio</span>}
         {focused && Math.floor(lf / 8) % 2 === 0 && <span style={{display: 'inline-block', width: 3, height: 32, background: K.orange, marginLeft: 2}} />}
       </div>
