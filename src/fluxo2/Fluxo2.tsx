@@ -10,6 +10,7 @@ import {colors, fonts} from '../theme';
 import {CFG, Grid, INTER, K, Variant, World, applyVariant, camAtKeys, clamp} from '../fluxo/canvas';
 import {Modal} from '../fluxo/windows';
 import {E2S, EndSticky, IfCard2, KEYS2, N2, NAVY_BOX, Node2, RouteCard, S, Wires2} from './flow';
+import {Sfx} from './sfx';
 import {ApprovalV3, ErrorV3, FieldsV3, MessageV3, WAChat, chatBoleto, chatFollow, chatPixBoleto, chatPixPix} from './win';
 
 export {DURATION2} from './flow';
@@ -95,6 +96,7 @@ export const Fluxo2: React.FC<{variant?: Variant}> = ({variant = 'linkedin'}) =>
       <Captions />
       <div style={{position: 'absolute', top: 58, left: 72, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>{CFG.watermark}</div>
       <Grain opacity={0.06} />
+      <Sfx />
     </AbsoluteFill>
   );
 };
