@@ -1,6 +1,6 @@
 import React from 'react';
 import {Easing, interpolate, useCurrentFrame} from 'remotion';
-import {Icon, INTER, K, NW, clamp} from './canvas';
+import {CFG, Icon, INTER, K, NW, clamp} from './canvas';
 
 const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
 export const MODAL = {x: 60, y: 150, w: 960, h: 1030};
@@ -52,12 +52,12 @@ const CUHeader: React.FC<{sending: boolean}> = ({sending}) => (
     <div style={{position: 'absolute', left: 44, top: 100, padding: '6px 16px', borderRadius: 8, background: sending ? K.orange : CU.pill, color: sending ? K.bg : CU.text, fontFamily: INTER, fontWeight: 700, fontSize: 22, letterSpacing: '0.06em'}}>
       {sending ? 'ENVIAR BOLETO' : 'A ENVIAR'}
     </div>
-    <div style={{position: 'absolute', left: 44, top: 148, fontFamily: INTER, fontWeight: 700, fontSize: 46, color: CU.text}}>Cobrança · Cliente Alpha</div>
+    <div style={{position: 'absolute', left: 44, top: 148, fontFamily: INTER, fontWeight: 700, fontSize: 46, color: CU.text}}>Cobrança · {CFG.company}</div>
   </>
 );
 
 const Avatar: React.FC<{s?: number}> = ({s = 40}) => (
-  <span style={{width: s, height: s, borderRadius: s / 2, background: K.orange, color: K.bg, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: s * 0.5}}>A</span>
+  <span style={{width: s, height: s, borderRadius: s / 2, background: K.orange, color: K.onAccent, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: s * 0.5}}>A</span>
 );
 
 const Cursor: React.FC<{x: number; y: number; press: number}> = ({x, y, press}) => (
@@ -78,7 +78,7 @@ export const ClickUpFields: React.FC<{lf: number}> = ({lf}) => {
   const rip = interpolate(lf, [CLICK, CLICK + 16], [0, 1], clamp);
   const rows: [string, React.ReactNode][] = [
     ['Responsável', <span style={{display: 'inline-flex', alignItems: 'center', gap: 12}}><Avatar /> Ana</span>],
-    ['Nomenclatura', <span style={{fontFamily: 'monospace', fontSize: 28}}>ALPHA_META_BOLETO_1125</span>],
+    ['Nomenclatura', <span style={{fontFamily: 'monospace', fontSize: 28}}>{CFG.slug}_META_BOLETO_1125</span>],
     ['Pagamento', <span style={{padding: '4px 14px', borderRadius: 8, background: CU.pill, fontSize: 26}}>Boleto</span>],
     ['Plataforma', 'Meta Ads'],
     ['Valor', 'R$ 1.500,00'],
@@ -99,12 +99,12 @@ export const ClickUpFields: React.FC<{lf: number}> = ({lf}) => {
       </div>
       <div
         style={{
-          position: 'absolute', left: BTN.x, top: BTN.y, width: BTN.w, height: BTN.h, borderRadius: 14, background: K.orange, color: K.bg,
+          position: 'absolute', left: BTN.x, top: BTN.y, width: BTN.w, height: BTN.h, borderRadius: 14, background: K.orange, color: K.onAccent,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, fontFamily: INTER, fontWeight: 700, fontSize: 32,
           opacity: fade(lf, 24), transform: `scale(${press ? 0.95 : 1})`, filter: press ? 'brightness(0.85)' : 'none',
         }}
       >
-        <svg width={22} height={26} viewBox="0 0 10 12"><path d="M0 0L10 6L0 12Z" fill={K.bg} /></svg>
+        <svg width={22} height={26} viewBox="0 0 10 12"><path d="M0 0L10 6L0 12Z" fill={K.onAccent} /></svg>
         Enviar boleto
       </div>
       {lf >= CLICK && rip < 1 && (
@@ -146,7 +146,7 @@ export const ClickUpMessage: React.FC<{lf: number}> = ({lf}) => {
         </div>
       </div>
       <div style={{position: 'absolute', left: 44, top: 872, fontFamily: INTER, fontWeight: 500, fontSize: 25, color: CU.grey, opacity: fade(lf, 10)}}>
-        Responsável: Ana  ·  Grupo: Alpha · Financeiro
+        Responsável: Ana  ·  Grupo: {CFG.group}
       </div>
     </div>
   );
@@ -171,7 +171,7 @@ export const ClickUpComment: React.FC<{lf: number}> = ({lf}) => {
       <div style={{position: 'absolute', left: 44, right: 44, top: 506, boxSizing: 'border-box', background: CU.panel, borderRadius: 18, borderLeft: `6px solid ${K.orange}`, padding: '26px 32px', opacity: card, transform: `translateY(${(1 - card) * 30}px)`}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
           <span style={{width: 56, height: 56, borderRadius: 12, background: K.orange, display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Icon name="flow" color={K.bg} size={38} />
+            <Icon name="flow" color={K.onAccent} size={38} />
           </span>
           <span style={{fontFamily: INTER, fontWeight: 700, fontSize: 30, color: CU.text}}>n8n</span>
           <span style={{fontFamily: INTER, fontWeight: 500, fontSize: 24, color: CU.grey}}>comentou · agora</span>
@@ -183,7 +183,7 @@ export const ClickUpComment: React.FC<{lf: number}> = ({lf}) => {
             return (
               <div key={t} style={{display: 'flex', alignItems: 'center', gap: 14, height: 52}}>
                 <div style={{width: 34, height: 34, borderRadius: 17, border: `2px solid ${on ? K.orange : CU.line}`, background: on ? K.orange : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <div style={{transform: `scale(${on})`}}><Icon name="check" color={K.bg} size={26} stroke={3} /></div>
+                  <div style={{transform: `scale(${on})`}}><Icon name="check" color={K.onAccent} size={26} stroke={3} /></div>
                 </div>
                 <span style={{fontFamily: INTER, fontWeight: 500, fontSize: 28, color: on ? CU.text : CU.grey}}>{t}</span>
               </div>
@@ -191,7 +191,7 @@ export const ClickUpComment: React.FC<{lf: number}> = ({lf}) => {
           })}
         </div>
         <div style={{display: 'flex', alignItems: 'center', gap: 12, marginTop: 16, fontFamily: INTER, fontWeight: 600, fontSize: 28, color: K.orange, opacity: fade(lf, 66)}}>
-          → Enviando para o grupo Alpha · Financeiro
+          → Enviando para o grupo {CFG.group}
         </div>
       </div>
     </div>
@@ -238,9 +238,9 @@ export const WhatsAppGroup: React.FC<{lf: number}> = ({lf}) => {
       {/* cabeçalho */}
       <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 124, background: WA.header, display: 'flex', alignItems: 'center', padding: '0 26px', gap: 18}}>
         <svg width={26} height={40} viewBox="0 0 10 16"><path d="M8 2L2 8l6 6" stroke={WA.text} strokeWidth={2} fill="none" strokeLinecap="round" /></svg>
-        <div style={{width: 76, height: 76, borderRadius: 38, background: WA.input, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: 30, color: WA.text}}>AF</div>
+        <div style={{width: 76, height: 76, borderRadius: 38, background: WA.input, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: 30, color: WA.text}}>{CFG.initials}</div>
         <div>
-          <div style={{fontFamily: INTER, fontWeight: 600, fontSize: 34, color: WA.text}}>Alpha · Financeiro</div>
+          <div style={{fontFamily: INTER, fontWeight: 600, fontSize: 34, color: WA.text}}>{CFG.group}</div>
           <div style={{fontFamily: INTER, fontWeight: 400, fontSize: 24, color: typing ? WA.green : WA.sub, marginTop: 2}}>{typing ? 'Ana está digitando…' : 'Ana, Bruno, Você'}</div>
         </div>
       </div>
@@ -263,7 +263,7 @@ export const WhatsAppGroup: React.FC<{lf: number}> = ({lf}) => {
           <div style={{display: 'flex', alignItems: 'center', gap: 18, background: '#025144', borderRadius: 12, padding: '14px 18px', width: 560, boxSizing: 'border-box'}}>
             <div style={{width: 56, height: 68, borderRadius: 8, background: '#E24A3B', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8, boxSizing: 'border-box', fontFamily: INTER, fontWeight: 700, fontSize: 16, color: '#fff'}}>PDF</div>
             <div>
-              <div style={{fontFamily: INTER, fontWeight: 500, fontSize: 28, color: WA.text}}>boleto_alpha_1125.pdf</div>
+              <div style={{fontFamily: INTER, fontWeight: 500, fontSize: 28, color: WA.text}}>boleto_{CFG.file}_1125.pdf</div>
               <div style={{fontFamily: INTER, fontWeight: 400, fontSize: 22, color: WA.sub, marginTop: 4}}>1 página · PDF · 84 kB</div>
             </div>
           </div>

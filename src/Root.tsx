@@ -36,5 +36,6 @@ export const Root: React.FC = () => (
   ))}
   <Composition id="Boleto" component={Boleto} durationInFrames={boletoDuration} fps={30} width={1080} height={1350} />
   <Composition id="Fluxo" component={Fluxo} durationInFrames={fluxoDuration} fps={30} width={1080} height={1350} />
+  <Composition id="FluxoLinkedin" component={Fluxo} defaultProps={{variant: 'linkedin' as const}} durationInFrames={fluxoDuration} fps={30} width={1080} height={1350} />
   </>
 );

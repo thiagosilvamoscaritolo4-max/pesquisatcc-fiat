@@ -4,9 +4,49 @@ import {colors, fonts} from '../theme';
 
 export const INTER = "'Inter', sans-serif";
 export const K = {
-  bg: '#0E0E0E', node: '#1E1E1E', nodeLine: '#3A3A3A', wire: '#3A3A3A', orange: colors.orange,
+  bg: '#0E0E0E', node: '#1E1E1E', nodeLine: '#3A3A3A', wire: '#3A3A3A', orange: colors.orange as string,
+  onAccent: colors.dark as string, dot: '#2C2C2C',
   light: '#ECECEC', grey: '#8B8B8B', panel: '#1B1B1B', panelLine: '#2E2E2E',
 };
+
+/** Textos que mudam entre as versões (Instagram / LinkedIn). */
+export const CFG = {
+  company: 'Cliente Alpha', group: 'Alpha · Financeiro', slug: 'ALPHA', file: 'alpha', initials: 'AF',
+  hook: ['MEU N8N MANDA', 'BOLETO SOZINHO.'] as [string, string], hookSize: 104,
+  watermark: '@workthiago',
+  end: {title: 'Quer esse fluxo no seu negócio?', sub: 'Chama no direct:', big: '@workthiago'},
+  caps: [
+    [186, 296, 'Clico em Enviar boleto no ClickUp'],
+    [356, 486, 'O n8n monta a mensagem pronta na tarefa'],
+    [526, 606, 'Confere se seguiu todos os requisitos'],
+    [628, 748, 'Aprovou? Avisa no comentário da própria tarefa'],
+    [802, 982, 'Chega no grupo certo, com a pessoa marcada'],
+    [1004, 1084, 'E ainda faz o follow-up 01, 02 e 03'],
+  ] as [number, number, string][],
+};
+
+export type Variant = 'instagram' | 'linkedin';
+export const applyVariant = (v: Variant) => {
+  if (v !== 'linkedin') return;
+  K.orange = '#2F5FCC'; // azul (destaques, fios, checks)
+  K.onAccent = '#FFFFFF';
+  K.dot = '#1A2333';
+  Object.assign(CFG, {
+    company: 'Empresa Exemplo', group: 'Empresa Exemplo · Financeiro', slug: 'EXEMPLO', file: 'exemplo', initials: 'EE',
+    hook: ['COMO AUTOMATIZEI', 'O ENVIO DE BOLETOS.'], hookSize: 94,
+    watermark: 'Thiago Silva',
+    end: {title: 'Cobrança no grupo certo, com a mensagem certa e sem envio manual.', sub: 'ClickUp · n8n · WhatsApp API', big: 'Thiago Silva'},
+    caps: [
+      [186, 296, 'A tarefa no ClickUp dispara o fluxo'],
+      [356, 486, 'O n8n monta a mensagem pronta na tarefa'],
+      [526, 606, 'Confere se seguiu todos os requisitos'],
+      [628, 748, 'Aprovado: registra no comentário da tarefa'],
+      [802, 982, 'Envia no grupo certo, com o responsável marcado'],
+      [1004, 1084, 'E segue com o follow-up 01, 02 e 03'],
+    ],
+  });
+};
+export const NAVY = '#14306E';
 export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 export const NW = 170; // tamanho do bloco (mundo)
 
@@ -50,7 +90,7 @@ export const Grid: React.FC<{cam: Cam}> = ({cam}) => {
     <div
       style={{
         position: 'absolute', inset: 0, backgroundColor: K.bg,
-        backgroundImage: `radial-gradient(circle, #2C2C2C ${r}px, transparent ${r + 0.8}px)`,
+        backgroundImage: `radial-gradient(circle, ${K.dot} ${r}px, transparent ${r + 0.8}px)`,
         backgroundSize: `${s}px ${s}px`,
         backgroundPosition: `${540 - cam.x * cam.z - s / 2}px ${675 - cam.y * cam.z - s / 2}px`,
       }}
@@ -191,7 +231,7 @@ export const Node: React.FC<{n: NodeDef}> = ({n}) => {
       )}
       {state === 'done' && (
         <div style={{position: 'absolute', right: -16, top: -16, width: 48, height: 48, borderRadius: 24, background: K.orange, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${interpolate(burst, [0, 0.4], [0.3, 1], clamp)})`}}>
-          <Icon name="check" color={K.bg} size={34} stroke={3} />
+          <Icon name="check" color={K.onAccent} size={34} stroke={3} />
         </div>
       )}
       {state === 'done' && hasOut && !n.ports && (
@@ -242,7 +282,7 @@ export const IfCard: React.FC = () => {
         return (
           <div key={t} style={{display: 'flex', alignItems: 'center', gap: 14, height: 50}}>
             <div style={{width: 32, height: 32, borderRadius: 16, border: `2px solid ${on ? K.orange : K.nodeLine}`, background: on ? K.orange : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <div style={{transform: `scale(${on})`}}><Icon name="check" color={K.bg} size={24} stroke={3} /></div>
+              <div style={{transform: `scale(${on})`}}><Icon name="check" color={K.onAccent} size={24} stroke={3} /></div>
             </div>
             <span style={{fontFamily: INTER, fontWeight: 500, fontSize: 25, color: on ? K.light : K.grey}}>{t}</span>
           </div>
@@ -261,9 +301,9 @@ export const TitleSticky: React.FC = () => (
 );
 
 export const CtaSticky: React.FC = () => (
-    <div style={{position: 'absolute', left: 990 - 410, top: 600 - 165, width: 820, height: 330, boxSizing: 'border-box', background: K.orange, borderRadius: 22, padding: '38px 44px', color: K.bg}}>
-      <div style={{fontFamily: INTER, fontWeight: 700, fontSize: 42, lineHeight: 1.15}}>Quer esse fluxo no seu negócio?</div>
-      <div style={{fontFamily: INTER, fontWeight: 500, fontSize: 30, marginTop: 14, opacity: 0.85}}>Chama no direct:</div>
-      <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 108, lineHeight: 1, marginTop: 8}}>@workthiago</div>
+    <div style={{position: 'absolute', left: 990 - 410, top: 600 - 165, width: 820, minHeight: 330, boxSizing: 'border-box', background: K.orange === colors.orange ? K.orange : NAVY, borderRadius: 22, padding: '38px 44px', color: K.onAccent}}>
+      <div style={{fontFamily: INTER, fontWeight: 700, fontSize: 42, lineHeight: 1.15}}>{CFG.end.title}</div>
+      <div style={{fontFamily: INTER, fontWeight: 500, fontSize: 30, marginTop: 14, opacity: 0.85}}>{CFG.end.sub}</div>
+      <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 108, lineHeight: 1, marginTop: 8}}>{CFG.end.big}</div>
     </div>
 );
