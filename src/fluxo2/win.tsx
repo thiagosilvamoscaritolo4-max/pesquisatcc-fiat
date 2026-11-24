@@ -1,5 +1,5 @@
 import React from 'react';
-import {Easing, interpolate} from 'remotion';
+import {Easing, interpolate, random} from 'remotion';
 import {CFG, Icon, INTER, K, clamp} from '../fluxo/canvas';
 import {Avatar, CU, CUHeader, Cursor, LABEL, Meta, WA, fade} from '../fluxo/windows';
 import {ALERT} from './flow';
@@ -193,6 +193,7 @@ export type ChatItem =
   | {at: number; kind: 'date'; label: string}
   | {at: number; kind: 'text'; tag?: string; body: React.ReactNode}
   | {at: number; kind: 'pix'; platform: string; code: string}
+  | {at: number; kind: 'img'; platform: string; value: string}
   | {at: number; kind: 'doc'; platform?: string; file: string}
   | {at: number; kind: 'in'; name: string; body: string; time: string};
 
@@ -206,6 +207,50 @@ const Grow: React.FC<{p: number; align: 'flex-start' | 'flex-end' | 'center'; ch
 
 const Tag: React.FC<{children: React.ReactNode}> = ({children}) => (
   <div style={{display: 'inline-block', fontFamily: INTER, fontWeight: 700, fontSize: 19, letterSpacing: '0.06em', color: WA.text, background: 'rgba(0,0,0,0.28)', borderRadius: 6, padding: '4px 10px', marginBottom: 8}}>{children}</div>
+);
+
+/** "Print" ilustrativo da tela de pagamento Pix (QR code fictício). */
+const QR: React.FC<{seed: string; size: number}> = ({seed, size}) => {
+  const n = 25;
+  const c = size / n;
+  const cells: React.ReactNode[] = [];
+  const finder = (x: number, y: number) => x < 7 && y < 7;
+  const inFinder = (x: number, y: number) => finder(x, y) || finder(n - 1 - x, y) || finder(x, n - 1 - y);
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
+      if (inFinder(x, y)) continue;
+      if (random(`${seed}-${x}-${y}`) > 0.52) cells.push(<rect key={`${x}-${y}`} x={x * c} y={y * c} width={c + 0.3} height={c + 0.3} fill="#111" />);
+    }
+  }
+  const F = (x: number, y: number) => (
+    <g key={`f${x}${y}`}>
+      <rect x={x * c} y={y * c} width={7 * c} height={7 * c} fill="#111" />
+      <rect x={(x + 1) * c} y={(y + 1) * c} width={5 * c} height={5 * c} fill="#fff" />
+      <rect x={(x + 2) * c} y={(y + 2) * c} width={3 * c} height={3 * c} fill="#111" />
+    </g>
+  );
+  return (
+    <svg width={size} height={size} style={{display: 'block'}}>
+      <rect width={size} height={size} fill="#fff" />
+      {cells}
+      {F(0, 0)}
+      {F(n - 7, 0)}
+      {F(0, n - 7)}
+    </svg>
+  );
+};
+
+const PixPrint: React.FC<{platform: string; value: string}> = ({platform, value}) => (
+  <div style={{width: 380, background: '#F4F5F7', borderRadius: 12, padding: '22px 24px', boxSizing: 'border-box', textAlign: 'center', fontFamily: INTER}}>
+    <div style={{fontWeight: 700, fontSize: 25, color: '#111'}}>Pagamento via Pix</div>
+    <div style={{fontWeight: 500, fontSize: 19, color: '#555', marginTop: 4}}>{platform === 'META ADS' ? 'Meta Ads' : 'Google Ads'} · {CFG.company}</div>
+    <div style={{display: 'flex', justifyContent: 'center', margin: '16px 0'}}>
+      <div style={{padding: 10, background: '#fff', borderRadius: 10, border: '2px solid #E2E4E8'}}><QR seed={platform} size={190} /></div>
+    </div>
+    <div style={{fontWeight: 700, fontSize: 32, color: '#111'}}>{value}</div>
+    <div style={{fontWeight: 500, fontSize: 18, color: '#666', marginTop: 2}}>Vence em 28/11</div>
+    <div style={{marginTop: 14, background: '#E2E4E8', borderRadius: 10, padding: '10px 0', fontWeight: 600, fontSize: 19, color: '#333'}}>Copiar código Pix</div>
+  </div>
 );
 
 const outStyle: React.CSSProperties = {maxWidth: 690, background: WA.out, color: WA.text, borderRadius: '18px 4px 18px 18px', padding: '12px 18px 8px', boxSizing: 'border-box'};
@@ -256,6 +301,17 @@ export const WAChat: React.FC<{lf: number; items: ChatItem[]; blueAt: number; ty
               </Grow>
             );
           }
+          if (it.kind === 'img') {
+            return (
+              <Grow key={i} p={p} align="flex-end">
+                <div style={{...outStyle, padding: 8}}>
+                  <div style={{padding: '4px 8px 0'}}><Tag>PRINT DO PIX · {it.platform}</Tag></div>
+                  <PixPrint platform={it.platform} value={it.value} />
+                  <div style={{padding: '0 8px'}}><Meta t="09:41" ticks blue={blue} /></div>
+                </div>
+              </Grow>
+            );
+          }
           if (it.kind === 'pix') {
             return (
               <Grow key={i} p={p} align="flex-end">
@@ -299,15 +355,18 @@ const PIX_GOOGLE = '00020126580014BR.GOV.BCB.PIX01369d2e7f10-3c44-4b8f-a1d2-5204
 export const chatPixBoleto = (): ChatItem[] => [
   {at: 2, kind: 'date', label: 'HOJE'},
   {at: 14, kind: 'text', body: <>Olá, {at}!{'\n'}Seguem os pagamentos das contas de anúncios. Vencimento: 28/11.</>},
-  {at: 34, kind: 'pix', platform: 'META ADS', code: PIX_META},
-  {at: 54, kind: 'doc', platform: 'GOOGLE ADS', file: `boleto_google_${CFG.file}.pdf`},
-  {at: 120, kind: 'in', name: 'Ana', body: 'Recebido! Pago hoje.', time: '09:43'},
+  {at: 32, kind: 'img', platform: 'META ADS', value: 'R$ 1.500,00'},
+  {at: 54, kind: 'pix', platform: 'META ADS', code: PIX_META},
+  {at: 72, kind: 'doc', platform: 'GOOGLE ADS', file: `boleto_google_${CFG.file}.pdf`},
+  {at: 136, kind: 'in', name: 'Ana', body: 'Recebido! Pago hoje.', time: '09:43'},
 ];
 export const chatPixPix = (): ChatItem[] => [
   {at: 2, kind: 'date', label: 'HOJE'},
   {at: 12, kind: 'text', body: <>Olá, {at}!{'\n'}Seguem os Pix das contas de anúncios. Vencimento: 28/11.</>},
-  {at: 30, kind: 'pix', platform: 'META ADS', code: PIX_META},
-  {at: 48, kind: 'pix', platform: 'GOOGLE ADS', code: PIX_GOOGLE},
+  {at: 28, kind: 'img', platform: 'META ADS', value: 'R$ 1.500,00'},
+  {at: 46, kind: 'pix', platform: 'META ADS', code: PIX_META},
+  {at: 66, kind: 'img', platform: 'GOOGLE ADS', value: 'R$ 800,00'},
+  {at: 84, kind: 'pix', platform: 'GOOGLE ADS', code: PIX_GOOGLE},
 ];
 export const chatBoleto = (): ChatItem[] => [
   {at: 2, kind: 'date', label: 'HOJE'},

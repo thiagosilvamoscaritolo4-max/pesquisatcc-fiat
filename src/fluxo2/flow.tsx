@@ -7,7 +7,10 @@ export const ALERT = '#E5484D';
 export const NAVY_BOX = '#14306E';
 
 /* ---------------- câmera ---------------- */
-export const KEYS2: Key[] = [
+/** Desloca a linha do tempo depois do Pix + boleto (+24) e do Pix + pix (+60 no total). */
+export const S = (f: number) => f + (f >= 1450 ? 60 : f >= 1318 ? 24 : 0);
+
+const KEYS_RAW: Key[] = [
   [0, 0, 0, 1.75], [59, 0, 0, 1.92],
   [60, 1050, 290, 0.42], [150, 1050, 290, 0.44], // corte: fluxo inteiro
   [178, 0, 0, 1.6], [306, 0, 0, 1.6], // ClickUp (1ª tentativa)
@@ -27,7 +30,8 @@ export const KEYS2: Key[] = [
   [1850, 1050, 290, 0.42], [1880, 1050, 290, 0.42],
   [1920, 1050, 875, 1.05], [2040, 1050, 875, 1.1],
 ];
-export const DURATION2 = 2040;
+export const KEYS2: Key[] = KEYS_RAW.map(([f, x, y, z]) => [S(f), x, y, z]);
+export const DURATION2 = S(2040);
 
 /* ---------------- blocos ---------------- */
 type W = [number, number];
@@ -35,7 +39,7 @@ export type Node2Def = {
   id: string; x: number; y: number; title: string; sub: string; icon: IconName;
   runs: W[]; trigger?: boolean; alert?: boolean; ports?: number[]; focus?: W[]; chips?: number;
 };
-export const N2: Node2Def[] = [
+const N2_RAW: Node2Def[] = [
   {id: 'T', x: 0, y: 0, title: 'Enviar boleto', sub: 'ClickUp Trigger', icon: 'bolt', trigger: true, runs: [[292, 298], [676, 682]]},
   {id: 'M', x: 300, y: 0, title: 'Monta mensagem', sub: 'Set', icon: 'edit', runs: [[334, 344], [706, 716]]},
   {id: 'IF', x: 600, y: 0, title: 'Confere requisitos', sub: 'IF', icon: 'split', runs: [[374, 384], [846, 856]], ports: [-38, 38]},
@@ -48,8 +52,11 @@ export const N2: Node2Def[] = [
   {id: 'WT', x: 1800, y: -170, title: 'Aguarda pagamento', sub: 'Wait', icon: 'clock', runs: [[1596, 1606]]},
   {id: 'F', x: 2100, y: -170, title: 'Follow-up', sub: 'WhatsApp API', icon: 'repeat', runs: [[1634, 1646]], chips: 1640},
 ];
+const sw = (w: W): W => [S(w[0]), S(w[1])];
+export const N2: Node2Def[] = N2_RAW.map((n) => ({...n, runs: n.runs.map(sw), focus: n.focus?.map(sw), chips: n.chips === undefined ? undefined : S(n.chips)}));
+
 type E2 = {from: string; to: string; port?: number; passes: W[]; alert?: boolean};
-export const E2S: E2[] = [
+const E2_RAW: E2[] = [
   {from: 'T', to: 'M', passes: [[310, 334], [684, 706]]},
   {from: 'M', to: 'IF', passes: [[350, 374], [822, 846]]},
   {from: 'IF', port: 38, to: 'E', passes: [[444, 468]], alert: true},
@@ -63,6 +70,7 @@ export const E2S: E2[] = [
   {from: 'W3', to: 'WT', passes: []},
   {from: 'WT', to: 'F', passes: [[1610, 1634]]},
 ];
+export const E2S: E2[] = E2_RAW.map((e) => ({...e, passes: e.passes.map(sw)}));
 const byId = (id: string) => N2.find((n) => n.id === id)!;
 
 export const Wires2: React.FC = () => {
