@@ -26,25 +26,37 @@ export const CFG = {
 };
 
 export type Variant = 'instagram' | 'linkedin';
+const BASE_K = {...K};
+const CLIENTE = {company: 'Empresa Exemplo', group: 'Empresa Exemplo · Financeiro', slug: 'EXEMPLO', file: 'exemplo', initials: 'EE'};
+const INSTAGRAM_CFG = {
+  ...CLIENTE,
+  hook: ['AINDA MANDA', 'BOLETO NA MÃO?'] as [string, string], hookSize: 94,
+  watermark: '@workthiago',
+  end: {title: 'Quer esse fluxo no seu negócio?', sub: 'Chama no direct:', big: '@workthiago'},
+};
+const LINKEDIN_CFG = {
+  ...CLIENTE,
+  hook: ['COMO AUTOMATIZEI', 'O ENVIO DE BOLETOS.'] as [string, string], hookSize: 94,
+  watermark: 'Thiago Silva',
+  end: {title: 'Cobrança no grupo certo, com a mensagem certa e sem envio manual.', sub: 'ClickUp · n8n · WhatsApp API', big: 'Thiago Silva'},
+  caps: [
+    [186, 296, 'A tarefa no ClickUp dispara o fluxo'],
+    [356, 486, 'O n8n monta a mensagem pronta na tarefa'],
+    [526, 606, 'Confere se seguiu todos os requisitos'],
+    [628, 748, 'Aprovado: registra no comentário da tarefa'],
+    [802, 982, 'Envia no grupo certo, com o responsável marcado'],
+    [1004, 1084, 'E segue com o follow-up 01, 02 e 03'],
+  ] as [number, number, string][],
+};
+const BASE_CFG = {...CFG};
 export const applyVariant = (v: Variant) => {
-  if (v !== 'linkedin') return;
-  K.orange = '#2F5FCC'; // azul (destaques, fios, checks)
-  K.onAccent = '#FFFFFF';
-  K.dot = '#1A2333';
-  Object.assign(CFG, {
-    company: 'Empresa Exemplo', group: 'Empresa Exemplo · Financeiro', slug: 'EXEMPLO', file: 'exemplo', initials: 'EE',
-    hook: ['COMO AUTOMATIZEI', 'O ENVIO DE BOLETOS.'], hookSize: 94,
-    watermark: 'Thiago Silva',
-    end: {title: 'Cobrança no grupo certo, com a mensagem certa e sem envio manual.', sub: 'ClickUp · n8n · WhatsApp API', big: 'Thiago Silva'},
-    caps: [
-      [186, 296, 'A tarefa no ClickUp dispara o fluxo'],
-      [356, 486, 'O n8n monta a mensagem pronta na tarefa'],
-      [526, 606, 'Confere se seguiu todos os requisitos'],
-      [628, 748, 'Aprovado: registra no comentário da tarefa'],
-      [802, 982, 'Envia no grupo certo, com o responsável marcado'],
-      [1004, 1084, 'E segue com o follow-up 01, 02 e 03'],
-    ],
-  });
+  Object.assign(K, BASE_K);
+  Object.assign(CFG, BASE_CFG, v === 'linkedin' ? LINKEDIN_CFG : INSTAGRAM_CFG);
+  if (v === 'linkedin') {
+    K.orange = '#2F5FCC'; // azul (destaques, fios, checks)
+    K.onAccent = '#FFFFFF';
+    K.dot = '#1A2333';
+  }
 };
 export const NAVY = '#14306E';
 export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
