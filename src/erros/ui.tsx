@@ -92,12 +92,12 @@ export const Chrome: React.FC<{tab: 0 | 1 | 2}> = ({tab}) => {
 export const TAB_POS: [number, number][] = [[94, 92], [300, 92], [496, 92]];
 
 /** Título no topo: ERRO 0X / COMO CORRIGIR. */
-export const Title: React.FC<{n: number; fix: boolean; text: string; at: number; size?: number}> = ({n, fix, text, at, size = 64}) => {
+export const Title: React.FC<{n: number; fix: boolean; text: string; at: number; size?: number; top?: number}> = ({n, fix, text, at, size = 64, top = 128}) => {
   const f = useCurrentFrame();
   const p = ease(f, at, 14);
   const chip = fix ? AM.orange : AM.red;
   return (
-    <div style={{position: 'absolute', left: 80, right: 80, top: 128, opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
+    <div style={{position: 'absolute', left: 80, right: 80, top, opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
       <div style={{display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 10, background: chip, color: fix ? AM.dark : '#fff', fontFamily: fonts.display, fontWeight: 800, fontSize: 30, letterSpacing: '0.1em'}}>
         <Mini kind={fix ? 'check' : 'x'} color={fix ? AM.dark : '#fff'} />
         {fix ? 'COMO CORRIGIR' : `ERRO 0${n}`}
@@ -107,12 +107,12 @@ export const Title: React.FC<{n: number; fix: boolean; text: string; at: number;
   );
 };
 
-export const Caption: React.FC<{from: number; to: number; text: string}> = ({from, to, text}) => {
+export const Caption: React.FC<{from: number; to: number; text: string; top?: number}> = ({from, to, text, top = 1194}) => {
   const f = useCurrentFrame();
   if (f < from || f > to + 8) return null;
   const o = Math.min(interpolate(f, [from, from + 8], [0, 1], clamp), interpolate(f, [to, to + 8], [1, 0], clamp));
   return (
-    <div style={{position: 'absolute', left: 0, right: 0, top: 1194, display: 'flex', justifyContent: 'center', opacity: o, transform: `translateY(${(1 - o) * 14}px)`}}>
+    <div style={{position: 'absolute', left: 0, right: 0, top, display: 'flex', justifyContent: 'center', opacity: o, transform: `translateY(${(1 - o) * 14}px)`}}>
       <div style={{display: 'flex', alignItems: 'center', gap: 14, background: 'rgba(12,12,12,0.9)', border: `2px solid ${AM.line}`, borderRadius: 16, padding: '14px 26px'}}>
         <span style={{width: 14, height: 14, borderRadius: 7, background: AM.orange}} />
         <span style={{fontFamily: INTER, fontWeight: 600, fontSize: 32, color: AM.text}}>{text}</span>

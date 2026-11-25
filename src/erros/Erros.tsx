@@ -14,6 +14,14 @@ import {PENCIL, ViewAds, ViewAdsets, ViewCampaigns, ViewLearning} from './views'
 
 export const ERROS_DURATION = 1290;
 
+type Fmt = 'feed' | 'reels';
+const LAYOUT = {
+  feed: {wm: 58, title: 128, win: {x: 40, y: 270, s: 1}, cap: 1194, hook: 330, sum: 190, cta: 720},
+  // Reels: fora das áreas do Instagram (topo, legenda embaixo e ícones à direita)
+  reels: {wm: 250, title: 330, win: {x: 30, y: 470, s: 0.92}, cap: 1330, hook: 560, sum: 400, cta: 930},
+};
+type L = (typeof LAYOUT)['feed'];
+
 const ZOOM: Key[] = [
   [0, 640, 220, 1.35], [84, 640, 220, 1.35], [112, 500, 450, 1], [196, 500, 450, 1],
   [216, 230, 520, 1.4], [258, 230, 520, 1.4], [274, 600, 520, 1.4], [306, 600, 520, 1.4], [326, 500, 450, 1],
@@ -75,13 +83,13 @@ const Sfx: React.FC = () => (
 );
 
 /* ---------------- final ---------------- */
-const Summary: React.FC = () => {
+const Summary: React.FC<{L: L}> = ({L}) => {
   const f = useCurrentFrame();
   if (f < 1124) return null;
   const items = ['Varie o criativo de verdade', 'Espere ~50 eventos antes de mexer', 'Concentre a verba em menos conjuntos'];
   return (
     <>
-      <div style={{position: 'absolute', left: 80, right: 80, top: 190, opacity: ease(f, 1124, 12)}}>
+      <div style={{position: 'absolute', left: 80, right: 80, top: L.sum, opacity: ease(f, 1124, 12)}}>
         <div style={{fontFamily: fonts.display, fontWeight: 800, fontSize: 32, letterSpacing: '0.16em', color: AM.orange}}>RESUMO</div>
         {items.map((t, i) => {
           const p = ease(f, 1134 + i * 10, 12);
@@ -93,7 +101,7 @@ const Summary: React.FC = () => {
           );
         })}
       </div>
-      <div style={{position: 'absolute', left: 80, right: 80, top: 720, ...headline, fontSize: 112, color: colors.light}}>
+      <div style={{position: 'absolute', left: 80, right: 80, top: L.cta, ...headline, fontSize: 112, color: colors.light}}>
         <Reveal delay={1172}>SALVA E MANDA</Reveal>
         <div style={{marginTop: 8}}>
           <Highlight delay={1178} bg={colors.orange} color={colors.dark}>PRO SEU GESTOR.</Highlight>
@@ -104,12 +112,12 @@ const Summary: React.FC = () => {
   );
 };
 
-const Hook: React.FC = () => {
+const Hook: React.FC<{L: L}> = ({L}) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [84, 98], [1, 0], clamp);
   if (o <= 0) return null;
   return (
-    <div style={{position: 'absolute', left: 80, right: 80, top: 330, opacity: o, ...headline, fontSize: 128, color: colors.light}}>
+    <div style={{position: 'absolute', left: 80, right: 80, top: L.hook, opacity: o, ...headline, fontSize: 128, color: colors.light}}>
       <Reveal delay={2}>3 ERROS QUE</Reveal>
       <Reveal delay={6}>QUEIMAM SEU</Reveal>
       <div style={{marginTop: 10}}>
@@ -120,7 +128,8 @@ const Hook: React.FC = () => {
   );
 };
 
-export const Erros: React.FC = () => {
+export const Erros: React.FC<{format?: Fmt}> = ({format = 'feed'}) => {
+  const L = LAYOUT[format];
   const f = useCurrentFrame();
   const cam = camAtKeys(ZOOM, f);
   const cur = pathAt(CURSOR, f);
@@ -137,9 +146,9 @@ export const Erros: React.FC = () => {
     <AbsoluteFill style={{background: AM.bg}}>
       <div
         style={{
-          position: 'absolute', left: WIN.x, top: WIN.y, width: WIN.w, height: WIN.h, borderRadius: 26, overflow: 'hidden',
+          position: 'absolute', left: L.win.x, top: L.win.y, width: WIN.w, height: WIN.h, borderRadius: 26, overflow: 'hidden', transformOrigin: '0 0',
           background: AM.win, border: `2px solid ${AM.line}`, boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
-          opacity: 1 - 0.96 * end, transform: `scale(${1 - 0.06 * end})`,
+          opacity: 1 - 0.96 * end, transform: `scale(${L.win.s * (1 - 0.06 * end)})`,
         }}
       >
         <div style={{position: 'absolute', left: 0, top: 0, width: WIN.w, height: WIN.h, transform: `translate(${WIN.w / 2 - cam.x * cam.z}px, ${WIN.h / 2 - cam.y * cam.z}px) scale(${cam.z})`, transformOrigin: '0 0'}}>
@@ -157,11 +166,11 @@ export const Erros: React.FC = () => {
         </div>
         <div style={{position: 'absolute', inset: 0, background: '#000', opacity: dimHook}} />
       </div>
-      {TITLES.map(([a, b, n, fix, t]) => (f >= a && f < b ? <Title key={a} n={n} fix={fix} text={t} at={a} size={t.length > 24 ? 60 : 66} /> : null))}
-      {CAPS.map(([a, b, t]) => <Caption key={a} from={a} to={b} text={t} />)}
-      <Hook />
-      <Summary />
-      <div style={{position: 'absolute', top: 58, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>@workthiago</div>
+      {TITLES.map(([a, b, n, fix, t]) => (f >= a && f < b ? <Title key={a} n={n} fix={fix} text={t} at={a} size={t.length > 24 ? 60 : 66} top={L.title} /> : null))}
+      {CAPS.map(([a, b, t]) => <Caption key={a} from={a} to={b} text={t} top={L.cap} />)}
+      <Hook L={L} />
+      <Summary L={L} />
+      <div style={{position: 'absolute', top: L.wm, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>@workthiago</div>
       <Grain opacity={0.06} />
       <Sfx />
     </AbsoluteFill>
