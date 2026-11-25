@@ -67,4 +67,28 @@ export const tweetsLight: {id: string; props: TweetLightProps}[] = [
     [{t: 'WhatsApp '}, {t: 'vende o produto.', b: true}],
     [{t: 'Se um falha, o anúncio leva a\u00A0culpa.'}],
   ]}},
+  {id: 'Light4', props: {...me, paras: [
+    [{t: 'Motivação '}, {t: 'te faz começar.', b: true}],
+    [{t: 'Disciplina '}, {t: 'te faz continuar.', b: true}],
+    [{t: 'Constância '}, {t: 'te faz chegar.', b: true}],
+    [{t: 'Quem depende só da primeira desiste na segunda\u00A0semana.'}],
+  ]}},
+  {id: 'Light5', props: {...me, paras: [
+    [{t: 'Dinheiro '}, {t: 'você recupera.', b: true}],
+    [{t: 'Oportunidade '}, {t: 'às vezes volta.', b: true}],
+    [{t: 'Tempo '}, {t: 'não volta nunca.', b: true}],
+    [{t: 'Escolhe bem onde você gasta\u00A0o\u00A0seu.'}],
+  ]}},
+  {id: 'Light6', props: {...me, paras: [
+    [{t: 'Fé '}, {t: 'sustenta o propósito.', b: true}],
+    [{t: 'Trabalho '}, {t: 'constrói o caminho.', b: true}],
+    [{t: 'Paciência '}, {t: 'espera a colheita.', b: true}],
+    [{t: 'Quem tem só um dos três desanima no\u00A0meio.'}],
+  ]}},
+  {id: 'Light7', props: {...me, paras: [
+    [{t: 'Ideia '}, {t: 'todo mundo tem.', b: true}],
+    [{t: 'Execução '}, {t: 'poucos fazem.', b: true}],
+    [{t: 'Constância '}, {t: 'quase ninguém aguenta.', b: true}],
+    [{t: 'É por isso que o topo tem pouca\u00A0gente.'}],
+  ]}},
 ];
