@@ -12,6 +12,7 @@ import {ErrosMobile} from './erros/mobile';
 import {FraseClean, frasesClean} from './FraseClean';
 import {TweetLight, tweetsLight} from './TweetLight';
 import {GEO_DURATION, Geo} from './geo/Geo';
+import {GEOMIN_DURATION, GeoMin} from './geo/GeoMin';
 
 export const Root: React.FC = () => (
   <>
@@ -56,5 +57,6 @@ export const Root: React.FC = () => (
     <Composition key={c.id} id={c.id} component={TweetLight} defaultProps={c.props} durationInFrames={1} fps={30} width={1080} height={1440} />
   ))}
   <Composition id="ChatGptAdsVsGeo" component={Geo} durationInFrames={GEO_DURATION} fps={30} width={1080} height={1350} />
+  <Composition id="ChatGptAdsVsGeoMin" component={GeoMin} durationInFrames={GEOMIN_DURATION} fps={30} width={1080} height={1350} />
   </>
 );
