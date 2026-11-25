@@ -9,6 +9,7 @@ import {Fluxo, fluxoDuration} from './fluxo/Fluxo';
 import {DURATION2, Fluxo2} from './fluxo2/Fluxo2';
 import {ERROS_DURATION, Erros} from './erros/Erros';
 import {ErrosMobile} from './erros/mobile';
+import {FraseClean, frasesClean} from './FraseClean';
 
 export const Root: React.FC = () => (
   <>
@@ -44,5 +45,8 @@ export const Root: React.FC = () => (
   <Composition id="FluxoInstagramV3" component={Fluxo2} defaultProps={{variant: 'instagram' as const}} durationInFrames={DURATION2} fps={30} width={1080} height={1350} />
   <Composition id="ErrosMetaAds" component={Erros} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1350} />
   <Composition id="ErrosMetaAdsReels" component={ErrosMobile} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1920} />
+  {frasesClean.map((c) => (
+    <Composition key={c.id} id={c.id} component={FraseClean} defaultProps={c.props} durationInFrames={1} fps={30} width={1080} height={1440} />
+  ))}
   </>
 );
