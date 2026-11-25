@@ -7,7 +7,7 @@ import numpy as np
 
 SR = 44100
 DUR = float(sys.argv[1]) if len(sys.argv) > 1 else 44.0
-OUT = Path(__file__).resolve().parent.parent / 'public' / 'music' / 'trilha-leve.wav'
+OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else Path(__file__).resolve().parent.parent / 'public' / 'music' / 'trilha-leve.wav'
 rng = np.random.default_rng(3)
 
 BPM = 84
