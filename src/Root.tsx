@@ -46,6 +46,7 @@ export const Root: React.FC = () => (
   <Composition id="FluxoInstagramV3" component={Fluxo2} defaultProps={{variant: 'instagram' as const}} durationInFrames={DURATION2} fps={30} width={1080} height={1350} />
   <Composition id="ErrosMetaAds" component={Erros} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1350} />
   <Composition id="ErrosMetaAdsReels" component={ErrosMobile} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1920} />
+  <Composition id="ErrosMetaAdsLinkedin" component={ErrosMobile} defaultProps={{variant: 'linkedin' as const}} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1920} />
   {frasesClean.map((c) => (
     <Composition key={c.id} id={c.id} component={FraseClean} defaultProps={c.props} durationInFrames={1} fps={30} width={1080} height={1440} />
   ))}

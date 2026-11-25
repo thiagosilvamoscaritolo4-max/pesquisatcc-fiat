@@ -86,7 +86,7 @@ export const Sfx: React.FC = () => (
 );
 
 /* ---------------- final ---------------- */
-export const Summary: React.FC<{L: L}> = ({L}) => {
+export const Summary: React.FC<{L: L; cta?: [string, string]; sig?: string}> = ({L, cta = ['SALVA E MANDA', 'PRO SEU GESTOR.'], sig = '@workthiago'}) => {
   const f = useCurrentFrame();
   if (f < 1124) return null;
   const items = ['Varie o criativo de verdade', 'Espere ~50 eventos antes de mexer', 'Concentre a verba em menos conjuntos'];
@@ -105,11 +105,11 @@ export const Summary: React.FC<{L: L}> = ({L}) => {
         })}
       </div>
       <div style={{position: 'absolute', left: 80, right: 80, top: L.cta, ...headline, fontSize: 112, color: colors.light}}>
-        <Reveal delay={1172}>SALVA E MANDA</Reveal>
+        <Reveal delay={1172}>{cta[0]}</Reveal>
         <div style={{marginTop: 8}}>
-          <Highlight delay={1178} bg={colors.orange} color={colors.dark}>PRO SEU GESTOR.</Highlight>
+          <Highlight delay={1178} bg={colors.orange} color={colors.dark}>{cta[1]}</Highlight>
         </div>
-        <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 40, letterSpacing: '0.06em', marginTop: 34, textTransform: 'none', opacity: ease(f, 1192, 12)}}>@workthiago</div>
+        <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 40, letterSpacing: '0.06em', marginTop: 34, textTransform: 'none', opacity: ease(f, 1192, 12)}}>{sig}</div>
       </div>
     </>
   );
