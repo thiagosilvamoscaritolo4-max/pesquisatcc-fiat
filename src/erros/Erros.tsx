@@ -15,10 +15,13 @@ import {PENCIL, ViewAds, ViewAdsets, ViewCampaigns, ViewLearning} from './views'
 export const ERROS_DURATION = 1290;
 
 type Fmt = 'feed' | 'reels';
+export type Layout = (typeof LAYOUT)['mobile'];
+export const MOBILE_LAYOUT = (): Layout => LAYOUT.mobile;
 const LAYOUT = {
   feed: {wm: 58, title: 128, win: {x: 40, y: 270, s: 1}, cap: 1194, hook: 330, sum: 190, cta: 720},
   // Reels: fora das áreas do Instagram (topo, legenda embaixo e ícones à direita)
   reels: {wm: 250, title: 330, win: {x: 30, y: 470, s: 0.92}, cap: 1330, hook: 560, sum: 400, cta: 930},
+  mobile: {wm: 196, title: 250, win: {x: 0, y: 0, s: 1}, cap: 1490, hook: 640, sum: 470, cta: 1010},
 };
 type L = (typeof LAYOUT)['feed'];
 
@@ -33,9 +36,9 @@ const CURSOR: [number, number, number][] = [
   [440, 900, 820], [464, 300, 92], [520, 600, 640], [550, PENCIL.x, PENCIL.y], [600, 300, 560], [636, PENCIL.x, PENCIL.y], [700, 900, 800],
   [780, 900, 800], [794, 330, 142], [840, 860, 820], [920, 860, 820], [944, 36, 192], [1000, 700, 800],
 ];
-const CLICKS = [136, 468, 556, 642, 798, 948];
+export const CLICKS = [136, 468, 556, 642, 798, 948];
 
-const TITLES: [number, number, number, boolean, string, number?][] = [
+export const TITLES: [number, number, number, boolean, string, number?][] = [
   [150, 310, 1, false, 'CRIATIVOS QUASE IGUAIS'],
   [310, 470, 1, true, 'VARIE O CRIATIVO DE VERDADE'],
   [470, 690, 2, false, 'MEXER NA CAMPANHA TODO DIA'],
@@ -43,7 +46,7 @@ const TITLES: [number, number, number, boolean, string, number?][] = [
   [800, 930, 3, false, 'VERBA PICADA EM 6 CONJUNTOS'],
   [930, 1120, 3, true, 'CONCENTRE A VERBA'],
 ];
-const CAPS: [number, number, string][] = [
+export const CAPS: [number, number, string][] = [
   [200, 256, 'Pro algoritmo, quase igual é o mesmo anúncio'],
   [262, 304, 'Resultado: 1 anúncio leva quase toda a verba'],
   [330, 466, 'Mude o ângulo, o formato e a mensagem'],
@@ -72,7 +75,7 @@ add([400], 'ding', 0.35);
 add([772, 1040], 'success', 0.45);
 add([964], 'whoosh', 0.3);
 add([1180], 'final', 0.45);
-const Sfx: React.FC = () => (
+export const Sfx: React.FC = () => (
   <>
     {cues.map(([f, n, v], i) => (
       <Sequence key={i} from={f} durationInFrames={60} layout="none">
@@ -83,7 +86,7 @@ const Sfx: React.FC = () => (
 );
 
 /* ---------------- final ---------------- */
-const Summary: React.FC<{L: L}> = ({L}) => {
+export const Summary: React.FC<{L: L}> = ({L}) => {
   const f = useCurrentFrame();
   if (f < 1124) return null;
   const items = ['Varie o criativo de verdade', 'Espere ~50 eventos antes de mexer', 'Concentre a verba em menos conjuntos'];
@@ -112,7 +115,7 @@ const Summary: React.FC<{L: L}> = ({L}) => {
   );
 };
 
-const Hook: React.FC<{L: L}> = ({L}) => {
+export const Hook: React.FC<{L: L}> = ({L}) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [84, 98], [1, 0], clamp);
   if (o <= 0) return null;

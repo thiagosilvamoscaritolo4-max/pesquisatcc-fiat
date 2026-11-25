@@ -43,8 +43,8 @@ export const ViewCampaigns: React.FC<{f: number}> = ({f}) => {
 };
 
 /* ===================== Erro 01 · anúncios ===================== */
-type Kind = 'sim' | 'depo' | 'antes' | 'oferta' | 'bast' | 'perg';
-const Thumb: React.FC<{kind: Kind; i: number}> = ({kind, i}) => {
+export type Kind = 'sim' | 'depo' | 'antes' | 'oferta' | 'bast' | 'perg';
+export const Thumb: React.FC<{kind: Kind; i: number}> = ({kind, i}) => {
   const box: React.CSSProperties = {width: 84, height: 104, borderRadius: 10, overflow: 'hidden', position: 'relative', flexShrink: 0, fontFamily: INTER};
   if (kind === 'sim') {
     const hues = ['#FF6A13', '#FF7A1F', '#FF6A13', '#F2641A', '#FF7413'];
@@ -95,14 +95,14 @@ const Thumb: React.FC<{kind: Kind; i: number}> = ({kind, i}) => {
   );
 };
 
-const SPLIT_A = [92, 2, 2, 2, 2];
-const SPLIT_B = [31, 24, 19, 15, 11];
-const RES_A = [9, 0, 0, 0, 0];
-const RES_B = [11, 8, 6, 4, 3];
-const DIVERSE: {k: Kind; n: string}[] = [
+export const SPLIT_A = [92, 2, 2, 2, 2];
+export const SPLIT_B = [31, 24, 19, 15, 11];
+export const RES_A = [9, 0, 0, 0, 0];
+export const RES_B = [11, 8, 6, 4, 3];
+export const DIVERSE: {k: Kind; n: string}[] = [
   {k: 'depo', n: 'Depoimento'}, {k: 'antes', n: 'Antes e depois'}, {k: 'oferta', n: 'Oferta direta'}, {k: 'bast', n: 'Bastidores'}, {k: 'perg', n: 'Pergunta'},
 ];
-const TOTAL = 432.9;
+export const TOTAL = 432.9;
 
 export const ViewAds: React.FC<{lf: number; fixAt: number}> = ({lf, fixAt}) => {
   const fx = interpolate(lf, [fixAt + 24, fixAt + 90], [0, 1], {...clamp, easing: (t) => 1 - (1 - t) ** 3});
@@ -227,7 +227,7 @@ export const ViewLearning: React.FC<{lf: number}> = ({lf}) => {
 export const PENCIL = {x: 214, y: 476};
 
 /* ===================== Erro 03 · conjuntos ===================== */
-const SETS = [
+export const SETS = [
   {n: 'Interesse: Marketing', r: 2}, {n: 'Interesse: Empreendedores', r: 1}, {n: 'Semelhante 1%', r: 3},
   {n: 'Interesse: Vendas', r: 0}, {n: 'Remarketing 30 dias', r: 1}, {n: 'Interesse: Negócios', r: 2},
 ];

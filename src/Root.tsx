@@ -8,6 +8,7 @@ import {Boleto, boletoDuration} from './boleto/Boleto';
 import {Fluxo, fluxoDuration} from './fluxo/Fluxo';
 import {DURATION2, Fluxo2} from './fluxo2/Fluxo2';
 import {ERROS_DURATION, Erros} from './erros/Erros';
+import {ErrosMobile} from './erros/mobile';
 
 export const Root: React.FC = () => (
   <>
@@ -42,6 +43,6 @@ export const Root: React.FC = () => (
   <Composition id="FluxoLinkedinV3" component={Fluxo2} defaultProps={{variant: 'linkedin' as const}} durationInFrames={DURATION2} fps={30} width={1080} height={1350} />
   <Composition id="FluxoInstagramV3" component={Fluxo2} defaultProps={{variant: 'instagram' as const}} durationInFrames={DURATION2} fps={30} width={1080} height={1350} />
   <Composition id="ErrosMetaAds" component={Erros} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1350} />
-  <Composition id="ErrosMetaAdsReels" component={Erros} defaultProps={{format: 'reels' as const}} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1920} />
+  <Composition id="ErrosMetaAdsReels" component={ErrosMobile} durationInFrames={ERROS_DURATION} fps={30} width={1080} height={1920} />
   </>
 );
