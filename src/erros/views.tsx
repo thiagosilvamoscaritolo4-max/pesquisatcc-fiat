@@ -256,7 +256,7 @@ export const ViewAdsets: React.FC<{lf: number}> = ({lf}) => {
         if (i > 0 && merged) return null;
         const first = i === 0 && merged;
         return (
-          <div key={s.n} style={{position: 'absolute', left: 0, right: 0, top: y, height: 76, borderBottom: `2px solid ${AM.line}`, background: first ? 'rgba(255,106,19,0.10)' : i % 2 ? AM.rowAlt : AM.row, opacity: op, transform: `translateY(${ty}px)`, zIndex: 6 - i}}>
+          <div key={s.n} style={{position: 'absolute', left: 0, right: 0, top: y, height: 76, borderBottom: `2px solid ${AM.line}`, background: first ? (AM.orange === '#FF6A13' ? 'rgba(255,106,19,0.10)' : 'rgba(47,95,204,0.16)') : i % 2 ? AM.rowAlt : AM.row, opacity: op, transform: `translateY(${ty}px)`, zIndex: 6 - i}}>
             <span style={{position: 'absolute', left: 24, top: 26}}><Check on={first ? 0 : ease(lf, SEL + 2 + i * 2, 6)} /></span>
             <span style={{...T, position: 'absolute', left: cols[0], top: 24, fontSize: 22}}>{first ? 'Conjunto único · Público aberto' : s.n}</span>
             <span style={{position: 'absolute', left: cols[1], top: 26}}><StatusPill kind={first ? (active ? 'active' : 'learn') : 'limited'} /></span>

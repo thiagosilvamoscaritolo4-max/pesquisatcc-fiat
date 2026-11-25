@@ -131,8 +131,9 @@ export const Hook: React.FC<{L: L}> = ({L}) => {
   );
 };
 
-export const Erros: React.FC<{format?: Fmt}> = ({format = 'feed'}) => {
-  setErrosTheme(false);
+export const Erros: React.FC<{format?: Fmt; variant?: 'instagram' | 'linkedin'}> = ({format = 'feed', variant = 'instagram'}) => {
+  const li = variant === 'linkedin';
+  setErrosTheme(li);
   const L = LAYOUT[format];
   const f = useCurrentFrame();
   const cam = camAtKeys(ZOOM, f);
@@ -173,10 +174,11 @@ export const Erros: React.FC<{format?: Fmt}> = ({format = 'feed'}) => {
       {TITLES.map(([a, b, n, fix, t]) => (f >= a && f < b ? <Title key={a} n={n} fix={fix} text={t} at={a} size={t.length > 24 ? 60 : 66} top={L.title} /> : null))}
       {CAPS.map(([a, b, t]) => <Caption key={a} from={a} to={b} text={t} top={L.cap} />)}
       <Hook L={L} />
-      <Summary L={L} />
-      <div style={{position: 'absolute', top: L.wm, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>@workthiago</div>
+      <Summary L={L} {...(li ? {cta: ['MENOS ANSIEDADE,', 'MAIS RESULTADO.'] as [string, string], sig: 'Thiago Silva · Paid Media Analyst'} : {})} />
+      <div style={{position: 'absolute', top: L.wm, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>{li ? 'Thiago Silva' : '@workthiago'}</div>
       <Grain opacity={0.06} />
       <Sfx />
+      {li && <Audio src={staticFile('music/trilha-leve.wav')} volume={0.26} />}
     </AbsoluteFill>
   );
 };
