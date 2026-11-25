@@ -9,7 +9,7 @@ import {Grain, Highlight, Reveal, headline} from '../components';
 import {colors, fonts} from '../theme';
 import {Key, camAtKeys} from '../fluxo/canvas';
 import {Cursor} from '../fluxo/windows';
-import {AM, Caption, Chrome, INTER, Mini, Title, WIN, clamp, ease, pathAt} from './ui';
+import {AM, Caption, Chrome, INTER, Mini, Title, WIN, clamp, ease, pathAt, setErrosTheme} from './ui';
 import {PENCIL, ViewAds, ViewAdsets, ViewCampaigns, ViewLearning} from './views';
 
 export const ERROS_DURATION = 1290;
@@ -98,7 +98,7 @@ export const Summary: React.FC<{L: L; cta?: [string, string]; sig?: string}> = (
           const p = ease(f, 1134 + i * 10, 12);
           return (
             <div key={t} style={{display: 'flex', alignItems: 'center', gap: 22, marginTop: 26, opacity: p, transform: `translateX(${(1 - p) * -30}px)`}}>
-              <span style={{width: 56, height: 56, borderRadius: 28, background: AM.orange, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}><Mini kind="check" color={AM.dark} size={34} /></span>
+              <span style={{width: 56, height: 56, borderRadius: 28, background: AM.orange, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}><Mini kind="check" color={AM.onAccent} size={34} /></span>
               <span style={{fontFamily: INTER, fontWeight: 700, fontSize: 40, color: AM.text}}>{t}</span>
             </div>
           );
@@ -107,7 +107,7 @@ export const Summary: React.FC<{L: L; cta?: [string, string]; sig?: string}> = (
       <div style={{position: 'absolute', left: 80, right: 80, top: L.cta, ...headline, fontSize: 112, color: colors.light}}>
         <Reveal delay={1172}>{cta[0]}</Reveal>
         <div style={{marginTop: 8}}>
-          <Highlight delay={1178} bg={colors.orange} color={colors.dark}>{cta[1]}</Highlight>
+          <Highlight delay={1178} bg={AM.hl} color={AM.onAccent}>{cta[1]}</Highlight>
         </div>
         <div style={{fontFamily: fonts.display, fontWeight: 700, fontSize: 40, letterSpacing: '0.06em', marginTop: 34, textTransform: 'none', opacity: ease(f, 1192, 12)}}>{sig}</div>
       </div>
@@ -124,7 +124,7 @@ export const Hook: React.FC<{L: L}> = ({L}) => {
       <Reveal delay={2}>3 ERROS QUE</Reveal>
       <Reveal delay={6}>QUEIMAM SEU</Reveal>
       <div style={{marginTop: 10}}>
-        <Highlight delay={12} bg={colors.orange} color={colors.dark}>ORÇAMENTO</Highlight>
+        <Highlight delay={12} bg={AM.hl} color={AM.onAccent}>ORÇAMENTO</Highlight>
       </div>
       <Reveal delay={20} style={{marginTop: 10}}>NO META ADS.</Reveal>
     </div>
@@ -132,6 +132,7 @@ export const Hook: React.FC<{L: L}> = ({L}) => {
 };
 
 export const Erros: React.FC<{format?: Fmt}> = ({format = 'feed'}) => {
+  setErrosTheme(false);
   const L = LAYOUT[format];
   const f = useCurrentFrame();
   const cam = camAtKeys(ZOOM, f);

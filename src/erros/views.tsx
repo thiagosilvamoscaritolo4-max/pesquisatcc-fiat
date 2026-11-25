@@ -47,7 +47,7 @@ export type Kind = 'sim' | 'depo' | 'antes' | 'oferta' | 'bast' | 'perg';
 export const Thumb: React.FC<{kind: Kind; i: number}> = ({kind, i}) => {
   const box: React.CSSProperties = {width: 84, height: 104, borderRadius: 10, overflow: 'hidden', position: 'relative', flexShrink: 0, fontFamily: INTER};
   if (kind === 'sim') {
-    const hues = ['#FF6A13', '#FF7A1F', '#FF6A13', '#F2641A', '#FF7413'];
+    const hues = AM.orange === '#FF6A13' ? ['#FF6A13', '#FF7A1F', '#FF6A13', '#F2641A', '#FF7413'] : ['#2F5FCC', '#3A6AD6', '#2F5FCC', '#2856BF', '#3463D0'];
     return (
       <div style={{...box, background: '#26272D'}}>
         <div style={{position: 'absolute', left: 14 + (i % 2) * 2, top: 14, width: 56, height: 46, borderRadius: 6, background: hues[i]}} />
@@ -70,7 +70,7 @@ export const Thumb: React.FC<{kind: Kind; i: number}> = ({kind, i}) => {
     return (
       <div style={{...box, display: 'flex'}}>
         <div style={{flex: 1, background: '#4A4B52', color: '#ddd', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8}}>ANTES</div>
-        <div style={{flex: 1, background: '#FF6A13', color: '#111', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8}}>DEPOIS</div>
+        <div style={{flex: 1, background: AM.orange, color: AM.onAccent, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 8}}>DEPOIS</div>
       </div>
     );
   }
@@ -174,7 +174,7 @@ export const ViewLearning: React.FC<{lf: number}> = ({lf}) => {
   return (
     <>
       <div style={{position: 'absolute', left: 24, top: 132, fontFamily: INTER, fontWeight: 500, fontSize: 19, color: AM.grey}}>[VENDAS] Black Friday  ›  Conjuntos</div>
-      <div style={{position: 'absolute', right: 24, top: 126, fontFamily: INTER, fontWeight: 700, fontSize: 22, color: AM.dark, background: AM.orange, borderRadius: 10, padding: '6px 16px'}}>DIA {day}</div>
+      <div style={{position: 'absolute', right: 24, top: 126, fontFamily: INTER, fontWeight: 700, fontSize: 22, color: AM.onAccent, background: AM.orange, borderRadius: 10, padding: '6px 16px'}}>DIA {day}</div>
       <div style={{position: 'absolute', left: 24, right: 24, top: 180, height: 360, background: AM.row, border: `2px solid ${red > 0 ? AM.red : AM.line}`, borderRadius: 18, boxShadow: red > 0 ? `0 0 0 ${6 * red}px rgba(229,72,77,0.25)` : 'none'}}>
         <div style={{position: 'absolute', left: 28, top: 24, display: 'flex', alignItems: 'center', gap: 24}}>
           <span style={{...T, fontSize: 28, fontWeight: 700}}>Conjunto 01 · Público aberto</span>

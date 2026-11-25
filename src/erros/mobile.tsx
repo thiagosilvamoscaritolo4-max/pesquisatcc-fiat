@@ -7,7 +7,7 @@ import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {Grain} from '../components';
 import {colors, fonts} from '../theme';
-import {AM, Caption, Check, INTER, StatusPill, Title, Toast, Toggle, brl, clamp, ease} from './ui';
+import {AM, Caption, Check, INTER, StatusPill, Title, Toast, Toggle, brl, clamp, ease, setErrosTheme} from './ui';
 import {DIVERSE, RES_A, RES_B, SETS, SPLIT_A, SPLIT_B, TOTAL, Thumb} from './views';
 import {CAPS, CLICKS, Hook, MOBILE_LAYOUT, Sfx, Summary, TITLES} from './Erros';
 
@@ -41,7 +41,7 @@ const AppChrome: React.FC<{tab: number}> = ({tab}) => (
     </div>
     <div style={{position: 'absolute', left: X, width: W, top: 470, height: 70, borderRadius: 16, background: '#1F2026', display: 'flex', padding: 6, boxSizing: 'border-box', gap: 6}}>
       {TABS.map((t, i) => (
-        <div key={t} style={{flex: 1, borderRadius: 12, background: i === tab ? AM.orange : 'transparent', color: i === tab ? AM.dark : AM.grey, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: 24}}>{t}</div>
+        <div key={t} style={{flex: 1, borderRadius: 12, background: i === tab ? AM.orange : 'transparent', color: i === tab ? AM.onAccent : AM.grey, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: INTER, fontWeight: 700, fontSize: 24}}>{t}</div>
       ))}
     </div>
   </>
@@ -148,7 +148,7 @@ const MLearning: React.FC<{lf: number}> = ({lf}) => {
   return (
     <>
       <Crumb>[VENDAS] Black Friday › Conjuntos</Crumb>
-      <div style={{position: 'absolute', right: X, top: 548, fontFamily: INTER, fontWeight: 700, fontSize: 24, color: AM.dark, background: AM.orange, borderRadius: 10, padding: '6px 16px'}}>DIA {day}</div>
+      <div style={{position: 'absolute', right: X, top: 548, fontFamily: INTER, fontWeight: 700, fontSize: 24, color: AM.onAccent, background: AM.orange, borderRadius: 10, padding: '6px 16px'}}>DIA {day}</div>
       <Card top={TOP} h={520} style={{border: `${red ? 4 : 2}px solid ${red ? AM.red : AM.line}`, boxShadow: red ? `0 0 0 ${8 * red}px rgba(229,72,77,0.25)` : 'none'}}>
         <div style={{position: 'absolute', left: 28, top: 26, fontFamily: INTER, fontWeight: 700, fontSize: 32, color: AM.text}}>Conjunto 01 · Público aberto</div>
         <div style={{position: 'absolute', left: 28, top: 80}}><StatusPill kind={fixed ? 'active' : 'learn'} /></div>
@@ -213,7 +213,7 @@ const MAdsets: React.FC<{lf: number}> = ({lf}) => {
         const op = i === 0 ? appear : appear * (1 - merge);
         const first = i === 0 && merged;
         return (
-          <Card key={st.n} top={TOP + i * (H + G)} h={H} style={{opacity: op, transform: `translateY(${ty}px)`, zIndex: 6 - i, background: first ? 'rgba(255,106,19,0.10)' : AM.row, border: `2px solid ${first ? AM.orange : AM.line}`}}>
+          <Card key={st.n} top={TOP + i * (H + G)} h={H} style={{opacity: op, transform: `translateY(${ty}px)`, zIndex: 6 - i, background: first ? (AM.orange === '#FF6A13' ? 'rgba(255,106,19,0.10)' : 'rgba(47,95,204,0.16)') : AM.row, border: `2px solid ${first ? AM.orange : AM.line}`}}>
             <div style={{position: 'absolute', left: 24, top: 40}}><Check on={first ? 0 : ease(lf, SEL + 2 + i * 2, 6)} size={30} /></div>
             <div style={{position: 'absolute', left: 74, top: 16, fontFamily: INTER, fontWeight: 700, fontSize: 26, color: AM.text}}>{first ? 'Conjunto único · Público aberto' : st.n}</div>
             <div style={{position: 'absolute', left: 74, top: 62}}><StatusPill kind={first ? (active ? 'active' : 'learn') : 'limited'} /></div>
@@ -257,6 +257,7 @@ const Touch: React.FC = () => {
 
 export const ErrosMobile: React.FC<{variant?: 'instagram' | 'linkedin'}> = ({variant = 'instagram'}) => {
   const li = variant === 'linkedin';
+  setErrosTheme(li);
   const L = MOBILE_LAYOUT();
   const f = useCurrentFrame();
   const view = f < 150 ? 0 : f < 470 ? 1 : f < 800 ? 2 : 3;

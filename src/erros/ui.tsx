@@ -5,7 +5,15 @@ import {colors, fonts} from '../theme';
 export const INTER = "'Inter', sans-serif";
 export const AM = {
   bg: '#0E0E0F', win: '#141518', row: '#18191D', rowAlt: '#1B1C21', line: '#2A2B31', text: '#ECECEC', grey: '#8B8D96', dim: '#5C5E66',
-  orange: colors.orange, dark: colors.dark, green: '#3FB950', amber: '#E3A008', red: '#E5484D',
+  orange: colors.orange as string, dark: colors.dark, green: '#3FB950', amber: '#E3A008', red: '#E5484D',
+  onAccent: colors.dark as string, hl: colors.orange as string,
+};
+
+/** Troca a cor de destaque: laranja (Instagram) ou azul (LinkedIn). */
+export const setErrosTheme = (blue: boolean) => {
+  AM.orange = blue ? '#2F5FCC' : colors.orange;
+  AM.onAccent = blue ? '#FFFFFF' : colors.dark;
+  AM.hl = blue ? '#1B3F8F' : colors.orange;
 };
 export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 export const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
@@ -61,7 +69,7 @@ export const Toggle: React.FC<{on: boolean}> = ({on}) => (
 
 export const Check: React.FC<{on: number; size?: number}> = ({on, size = 24}) => (
   <span style={{display: 'inline-flex', width: size, height: size, borderRadius: 6, border: `2px solid ${on > 0 ? AM.orange : AM.dim}`, background: on > 0 ? AM.orange : 'transparent', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box'}}>
-    <svg width={size - 8} height={size - 8} viewBox="0 0 24 24" style={{transform: `scale(${on})`}}><path d="M5 12.5l4.5 4.5L19 7.5" stroke={AM.dark} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    <svg width={size - 8} height={size - 8} viewBox="0 0 24 24" style={{transform: `scale(${on})`}}><path d="M5 12.5l4.5 4.5L19 7.5" stroke={AM.onAccent} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
   </span>
 );
 
@@ -98,8 +106,8 @@ export const Title: React.FC<{n: number; fix: boolean; text: string; at: number;
   const chip = fix ? AM.orange : AM.red;
   return (
     <div style={{position: 'absolute', left: 80, right: 80, top, opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
-      <div style={{display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 10, background: chip, color: fix ? AM.dark : '#fff', fontFamily: fonts.display, fontWeight: 800, fontSize: 30, letterSpacing: '0.1em'}}>
-        <Mini kind={fix ? 'check' : 'x'} color={fix ? AM.dark : '#fff'} />
+      <div style={{display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 10, background: chip, color: fix ? AM.onAccent : '#fff', fontFamily: fonts.display, fontWeight: 800, fontSize: 30, letterSpacing: '0.1em'}}>
+        <Mini kind={fix ? 'check' : 'x'} color={fix ? AM.onAccent : '#fff'} />
         {fix ? 'COMO CORRIGIR' : `ERRO 0${n}`}
       </div>
       <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: size, lineHeight: 1, color: AM.text, marginTop: 12, whiteSpace: 'nowrap'}}>{text}</div>
