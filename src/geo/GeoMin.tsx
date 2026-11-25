@@ -17,6 +17,13 @@ export const ease = (f: number, a: number, d = 14) => interpolate(f, [a, a + d],
 export const out = (f: number, a: number, d = 12) => interpolate(f, [a, a + d], [1, 0], clamp);
 export const M = 96; // margem
 
+/** Estilo: LinkedIn (azul, Inter) ou Instagram @workthiago (laranja, títulos condensados). */
+export const GEO_STYLE = {ig: false};
+export const setGeoStyle = (ig: boolean) => {
+  GEO_STYLE.ig = ig;
+  C.blue = ig ? '#FF6A13' : '#4C7BE8';
+};
+
 /** Bloco que entra subindo de leve e some no fim da cena. */
 export const Scene: React.FC<{from: number; to: number; children: React.ReactNode}> = ({from, to, children}) => {
   const f = useCurrentFrame();
@@ -24,9 +31,12 @@ export const Scene: React.FC<{from: number; to: number; children: React.ReactNod
   const o = ease(f, from, 16) * out(f, to);
   return <AbsoluteFill style={{opacity: o, transform: `translateY(${(1 - ease(f, from, 16)) * 16}px)`}}>{children}</AbsoluteFill>;
 };
-export const H: React.FC<{children: React.ReactNode; top: number; size?: number}> = ({children, top, size = 58}) => (
-  <div style={{position: 'absolute', left: M, right: M, top, fontFamily: INTER, fontWeight: 600, fontSize: size, lineHeight: 1.15, letterSpacing: '-0.025em', color: C.text}}>{children}</div>
-);
+export const H: React.FC<{children: React.ReactNode; top: number; size?: number}> = ({children, top, size = 58}) =>
+  GEO_STYLE.ig ? (
+    <div style={{position: 'absolute', left: M, right: M, top, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: size * 1.4, lineHeight: 0.95, textTransform: 'uppercase', color: C.text}}>{children}</div>
+  ) : (
+    <div style={{position: 'absolute', left: M, right: M, top, fontFamily: INTER, fontWeight: 600, fontSize: size, lineHeight: 1.15, letterSpacing: '-0.025em', color: C.text}}>{children}</div>
+  );
 export const Spark: React.FC<{s: number}> = ({s}) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /></svg>
 );
@@ -232,7 +242,9 @@ const Sfx: React.FC = () => (
   </>
 );
 
-export const GeoMin: React.FC = () => (
+export const GeoMin: React.FC = () => {
+  setGeoStyle(false);
+  return (
   <AbsoluteFill style={{background: C.bg}}>
     <Intro />
     <Chat />
@@ -244,4 +256,5 @@ export const GeoMin: React.FC = () => (
     <Sfx />
     <Audio src={staticFile('music/trilha-leve-31.wav')} volume={0.24} />
   </AbsoluteFill>
-);
+  );
+};

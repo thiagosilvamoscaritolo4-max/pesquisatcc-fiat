@@ -2,7 +2,8 @@ import '../fonts';
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Grain} from '../components';
-import {C, H, INTER, M, Scene, Spark, Tag, clamp, ease} from './GeoMin';
+import {C, GEO_STYLE, H, INTER, M, Scene, Spark, Tag, clamp, ease, setGeoStyle} from './GeoMin';
+import {fonts} from '../theme';
 
 export const GEOWHY_DURATION = 1455; // sincronizado com public/narracao-ia.mp3
 const RED = '#E5484D';
@@ -20,9 +21,15 @@ const Intro: React.FC = () => {
       <div style={{position: 'absolute', left: M, right: M, top: 520, fontFamily: INTER, fontWeight: 500, fontSize: 40, color: C.grey, letterSpacing: '-0.02em', opacity: ease(f, 2)}}>
         Muita gente já não pesquisa só no Google.
       </div>
-      <div style={{position: 'absolute', left: M, right: M, top: 600, fontFamily: INTER, fontWeight: 600, fontSize: 64, color: C.text, letterSpacing: '-0.03em', lineHeight: 1.1, opacity: ease(f, 88)}}>
-        Pergunta direto<br />para a <span style={{color: C.blue}}>IA</span>.
-      </div>
+      {GEO_STYLE.ig ? (
+        <div style={{position: 'absolute', left: M, right: M, top: 600, fontFamily: fonts.display, fontWeight: 900, fontSize: 104, lineHeight: 0.95, textTransform: 'uppercase', color: C.text, opacity: ease(f, 88)}}>
+          Pergunta direto<br />para a <span style={{background: C.blue, color: '#0B0B0B', padding: '0 10px', borderRadius: 8}}>IA.</span>
+        </div>
+      ) : (
+        <div style={{position: 'absolute', left: M, right: M, top: 600, fontFamily: INTER, fontWeight: 600, fontSize: 64, color: C.text, letterSpacing: '-0.03em', lineHeight: 1.1, opacity: ease(f, 88)}}>
+          Pergunta direto<br />para a <span style={{color: C.blue}}>IA</span>.
+        </div>
+      )}
     </Scene>
   );
 };
@@ -205,9 +212,19 @@ const End: React.FC = () => {
         <div style={{opacity: ease(f, A, 16)}}>Anúncio aluga<br />a atenção.</div>
         <div style={{opacity: ease(f, A + 70, 16), color: C.blue, marginTop: 26}}>Presença forte faz<br />a IA indicar você.</div>
       </H>
-      <div style={{position: 'absolute', left: M, top: 860, fontFamily: INTER, fontWeight: 600, fontSize: 24, color: C.text, opacity: ease(f, A + 122)}}>
-        Thiago Silva <span style={{color: C.dim, fontWeight: 500}}>· Paid Media Analyst</span>
-      </div>
+      {GEO_STYLE.ig ? (
+        <div style={{position: 'absolute', left: M, right: M, top: 900, opacity: ease(f, A + 172), transform: `translateY(${(1 - ease(f, A + 172)) * 20}px)`}}>
+          <div style={{background: C.blue, borderRadius: 24, padding: '30px 34px', color: '#0B0B0B'}}>
+            <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 52, lineHeight: 1, textTransform: 'uppercase'}}>Quer que a IA indique a sua loja?</div>
+            <div style={{fontFamily: INTER, fontWeight: 600, fontSize: 28, marginTop: 14}}>Chama no direct:</div>
+            <div style={{fontFamily: fonts.display, fontWeight: 900, fontSize: 84, lineHeight: 1, marginTop: 4}}>@workthiago</div>
+          </div>
+        </div>
+      ) : (
+        <div style={{position: 'absolute', left: M, top: 860, fontFamily: INTER, fontWeight: 600, fontSize: 24, color: C.text, opacity: ease(f, A + 122)}}>
+          Thiago Silva <span style={{color: C.dim, fontWeight: 500}}>· Paid Media Analyst</span>
+        </div>
+      )}
     </AbsoluteFill>
   );
 };
@@ -235,17 +252,47 @@ const Sfx: React.FC = () => (
   </>
 );
 
-export const GeoWhy: React.FC = () => (
-  <AbsoluteFill style={{background: C.bg}}>
+const Content: React.FC<{watermark: boolean}> = ({watermark}) => (
+  <>
     <Intro />
     <Outcomes />
     <Sources />
     <Problem />
     <End />
-    <div style={{position: 'absolute', top: 64, left: M, fontFamily: INTER, fontWeight: 600, fontSize: 22, color: C.grey}}>Thiago Silva</div>
-    <Grain opacity={0.04} />
+    {watermark && <div style={{position: 'absolute', top: 64, left: M, fontFamily: INTER, fontWeight: 600, fontSize: 22, color: C.grey}}>Thiago Silva</div>}
+  </>
+);
+const Sound: React.FC = () => (
+  <>
     <Sfx />
     <Audio src={staticFile('narracao-ia.mp3')} volume={1} />
     <Audio src={staticFile('music/trilha-leve-48.wav')} volume={0.12} />
-  </AbsoluteFill>
+  </>
 );
+
+export const GeoWhy: React.FC = () => {
+  setGeoStyle(false);
+  return (
+    <AbsoluteFill style={{background: C.bg}}>
+      <Content watermark />
+      <Grain opacity={0.04} />
+      <Sound />
+    </AbsoluteFill>
+  );
+};
+
+/** Reels do @workthiago: tela cheia 9:16, conteúdo dentro da área segura do Instagram. */
+export const GEOWHY_REELS_DURATION = 1530;
+export const GeoWhyReels: React.FC = () => {
+  setGeoStyle(true);
+  return (
+    <AbsoluteFill style={{background: C.bg}}>
+      <div style={{position: 'absolute', left: -14, top: 250, width: 1080, height: 1350, transform: 'scale(0.94)', transformOrigin: 'top left'}}>
+        <Content watermark={false} />
+      </div>
+      <div style={{position: 'absolute', top: 196, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: C.text}}>@workthiago</div>
+      <Grain opacity={0.06} />
+      <Sound />
+    </AbsoluteFill>
+  );
+};
