@@ -9,28 +9,28 @@ import {Grain} from '../components';
 
 export const GEOMIN_DURATION = 930;
 
-const C = {bg: '#0E0F12', card: '#15171C', soft: '#1C1F26', line: '#262931', text: '#ECECEC', grey: '#8B8D96', dim: '#5C5E66', blue: '#4C7BE8', amber: '#E3A008'};
-const INTER = "'Inter', sans-serif";
-const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
-const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
-const ease = (f: number, a: number, d = 14) => interpolate(f, [a, a + d], [0, 1], {...clamp, easing: EXPO});
-const out = (f: number, a: number, d = 12) => interpolate(f, [a, a + d], [1, 0], clamp);
-const M = 96; // margem
+export const C = {bg: '#0E0F12', card: '#15171C', soft: '#1C1F26', line: '#262931', text: '#ECECEC', grey: '#8B8D96', dim: '#5C5E66', blue: '#4C7BE8', amber: '#E3A008'};
+export const INTER = "'Inter', sans-serif";
+export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
+export const EXPO = Easing.bezier(0.16, 1, 0.3, 1);
+export const ease = (f: number, a: number, d = 14) => interpolate(f, [a, a + d], [0, 1], {...clamp, easing: EXPO});
+export const out = (f: number, a: number, d = 12) => interpolate(f, [a, a + d], [1, 0], clamp);
+export const M = 96; // margem
 
 /** Bloco que entra subindo de leve e some no fim da cena. */
-const Scene: React.FC<{from: number; to: number; children: React.ReactNode}> = ({from, to, children}) => {
+export const Scene: React.FC<{from: number; to: number; children: React.ReactNode}> = ({from, to, children}) => {
   const f = useCurrentFrame();
   if (f < from || f > to + 12) return null;
   const o = ease(f, from, 16) * out(f, to);
   return <AbsoluteFill style={{opacity: o, transform: `translateY(${(1 - ease(f, from, 16)) * 16}px)`}}>{children}</AbsoluteFill>;
 };
-const H: React.FC<{children: React.ReactNode; top: number; size?: number}> = ({children, top, size = 58}) => (
+export const H: React.FC<{children: React.ReactNode; top: number; size?: number}> = ({children, top, size = 58}) => (
   <div style={{position: 'absolute', left: M, right: M, top, fontFamily: INTER, fontWeight: 600, fontSize: size, lineHeight: 1.15, letterSpacing: '-0.025em', color: C.text}}>{children}</div>
 );
-const Spark: React.FC<{s: number}> = ({s}) => (
+export const Spark: React.FC<{s: number}> = ({s}) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /></svg>
 );
-const Tag: React.FC<{c: string; children: React.ReactNode; o: number}> = ({c, children, o}) => (
+export const Tag: React.FC<{c: string; children: React.ReactNode; o: number}> = ({c, children, o}) => (
   <span style={{display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: INTER, fontWeight: 600, fontSize: 19, color: c, border: `1.5px solid ${c}`, borderRadius: 999, padding: '4px 12px', opacity: o}}>
     <span style={{width: 7, height: 7, borderRadius: 4, background: c}} />
     {children}
