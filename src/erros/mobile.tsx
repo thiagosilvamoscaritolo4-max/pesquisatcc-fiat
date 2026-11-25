@@ -4,7 +4,7 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Grain} from '../components';
 import {colors, fonts} from '../theme';
 import {AM, Caption, Check, INTER, StatusPill, Title, Toast, Toggle, brl, clamp, ease, setErrosTheme} from './ui';
@@ -299,6 +299,7 @@ export const ErrosMobile: React.FC<{variant?: 'instagram' | 'linkedin'}> = ({var
       <div style={{position: 'absolute', top: L.wm, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: colors.light}}>{li ? 'Thiago Silva' : '@workthiago'}</div>
       <Grain opacity={0.06} />
       <Sfx />
+      {li && <Audio src={staticFile('music/trilha-leve.wav')} volume={0.26} />}
     </AbsoluteFill>
   );
 };
