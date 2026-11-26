@@ -296,3 +296,16 @@ export const GeoWhyReels: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+/** Feed 4:5 do @workthiago (mesma comunicação do Reels). */
+export const GeoWhyIgFeed: React.FC = () => {
+  setGeoStyle(true);
+  return (
+    <AbsoluteFill style={{background: C.bg}}>
+      <Content watermark={false} />
+      <div style={{position: 'absolute', top: 58, left: M, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: C.text}}>@workthiago</div>
+      <Grain opacity={0.06} />
+      <Sound />
+    </AbsoluteFill>
+  );
+};

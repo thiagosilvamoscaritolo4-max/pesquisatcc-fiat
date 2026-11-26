@@ -13,7 +13,7 @@ import {FraseClean, frasesClean} from './FraseClean';
 import {TweetLight, tweetsLight} from './TweetLight';
 import {GEO_DURATION, Geo} from './geo/Geo';
 import {GEOMIN_DURATION, GeoMin} from './geo/GeoMin';
-import {GEOWHY_DURATION, GEOWHY_REELS_DURATION, GeoWhy, GeoWhyReels} from './geo/GeoWhy';
+import {GEOWHY_DURATION, GEOWHY_REELS_DURATION, GeoWhy, GeoWhyIgFeed, GeoWhyReels} from './geo/GeoWhy';
 
 export const Root: React.FC = () => (
   <>
@@ -61,5 +61,6 @@ export const Root: React.FC = () => (
   <Composition id="ChatGptAdsVsGeoMin" component={GeoMin} durationInFrames={GEOMIN_DURATION} fps={30} width={1080} height={1350} />
   <Composition id="PresencaNaIA" component={GeoWhy} durationInFrames={GEOWHY_DURATION} fps={30} width={1080} height={1350} />
   <Composition id="PresencaNaIAReels" component={GeoWhyReels} durationInFrames={GEOWHY_REELS_DURATION} fps={30} width={1080} height={1920} />
+  <Composition id="PresencaNaIAFeedIG" component={GeoWhyIgFeed} durationInFrames={GEOWHY_REELS_DURATION} fps={30} width={1080} height={1350} />
   </>
 );
