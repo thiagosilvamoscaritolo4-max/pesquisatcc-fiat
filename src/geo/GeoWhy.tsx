@@ -287,10 +287,11 @@ export const GeoWhyReels: React.FC = () => {
   setGeoStyle(true);
   return (
     <AbsoluteFill style={{background: C.bg}}>
-      <div style={{position: 'absolute', left: -14, top: 250, width: 1080, height: 1350, transform: 'scale(0.94)', transformOrigin: 'top left'}}>
+      {/* área segura: topo 269 px, embaixo 672 px (35%), laterais 65 px e ícones à direita */}
+      <div style={{position: 'absolute', left: -10, top: 190, width: 1080, height: 1350, transform: 'scale(0.92)', transformOrigin: 'top left'}}>
         <Content watermark={false} />
       </div>
-      <div style={{position: 'absolute', top: 196, left: 80, fontFamily: fonts.display, fontWeight: 700, fontSize: 32, letterSpacing: '0.04em', color: C.text}}>@workthiago</div>
+      <div style={{position: 'absolute', top: 272, left: 78, fontFamily: fonts.display, fontWeight: 700, fontSize: 30, letterSpacing: '0.04em', color: C.text}}>@workthiago</div>
       <Grain opacity={0.06} />
       <Sound />
     </AbsoluteFill>
